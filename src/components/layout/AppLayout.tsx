@@ -9,11 +9,12 @@ import {
   Bell,
   Shield,
   Menu,
-  X,
+  ClipboardCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useCallback } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -37,8 +38,8 @@ const NavItem = memo(function NavItem({ to, icon, label, badge, onClick }: NavIt
       <Button
         variant={isActive ? 'secondary' : 'ghost'}
         className={cn(
-          "w-full justify-start gap-3",
-          isActive && "bg-primary/10 text-primary"
+          "w-full justify-start gap-3 transition-all duration-200",
+          isActive && "bg-primary/10 text-primary shadow-sm"
         )}
       >
         {icon}
@@ -72,6 +73,12 @@ const Navigation = memo(function Navigation({
         to="/credentials"
         icon={<FileCheck className="w-5 h-5" />}
         label="My Credentials"
+        onClick={onItemClick}
+      />
+      <NavItem
+        to="/checklist"
+        icon={<ClipboardCheck className="w-5 h-5" />}
+        label="Ready Checklist"
         onClick={onItemClick}
       />
       <NavItem
@@ -123,7 +130,7 @@ export const AppLayout = memo(function AppLayout({ children, alertCount }: AppLa
             </Sheet>
 
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center shadow-md">
                 <Shield className="w-5 h-5 text-primary-foreground" />
               </div>
               <div>
@@ -136,11 +143,12 @@ export const AppLayout = memo(function AppLayout({ children, alertCount }: AppLa
           </div>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <NavLink to="/alerts">
               <Button variant="ghost" size="icon" className="relative">
                 <Bell className="w-5 h-5" />
                 {alertCount !== undefined && alertCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-destructive-foreground text-xs rounded-full flex items-center justify-center animate-pulse">
                     {alertCount}
                   </span>
                 )}

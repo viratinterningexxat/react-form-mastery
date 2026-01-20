@@ -1,12 +1,13 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useCredentials } from '@/hooks/useCredentials';
 import { useStudentProfile } from '@/hooks/useStudentProfile';
-import { ReadinessCard } from '@/components/credentials/ReadinessCard';
+import { CircularProgress } from '@/components/dashboard/CircularProgress';
+import { ExpirationTimeline } from '@/components/dashboard/ExpirationTimeline';
+import { CategoryProgress } from '@/components/dashboard/CategoryProgress';
 import { AlertsPanel } from '@/components/credentials/AlertsPanel';
 import {
   FileCheck,
@@ -15,26 +16,27 @@ import {
   CheckCircle2,
   Clock,
   AlertTriangle,
-  Shield,
   Upload,
-  TrendingUp,
+  ClipboardCheck,
+  Shield,
 } from 'lucide-react';
+import { differenceInDays, parseISO } from 'date-fns';
 
 const QuickStatCard = memo(function QuickStatCard({
   icon,
   label,
   value,
   trend,
-  color,
+  colorClass,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string | number;
   trend?: string;
-  color: string;
+  colorClass: string;
 }) {
   return (
-    <Card>
+    <Card className="hover:shadow-md transition-shadow duration-200">
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">
           <div>
@@ -44,7 +46,7 @@ const QuickStatCard = memo(function QuickStatCard({
               <p className="text-xs text-muted-foreground mt-1">{trend}</p>
             )}
           </div>
-          <div className={`p-3 rounded-lg bg-${color}/10`}>
+          <div className={`p-3 rounded-lg ${colorClass}`}>
             {icon}
           </div>
         </div>
@@ -54,15 +56,56 @@ const QuickStatCard = memo(function QuickStatCard({
 });
 
 const Dashboard = memo(function Dashboard() {
-  const { clinicalReadiness, alerts, markAlertAsRead, documentsByCategory, requirements } = useCredentials();
+  const { clinicalReadiness, alerts, markAlertAsRead, documents, requirements, documentsByCategory } = useCredentials();
   const { profile, getProfileCompleteness } = useStudentProfile();
 
   const profileCompleteness = getProfileCompleteness();
 
   // Calculate quick actions needed
   const pendingUploads = requirements.filter(
-    (req) => !documentsByCategory[req.category]?.find((item) => item.requirement.id === req.id)?.document
+    (req) => !documents.find((d) => d.requirementId === req.id)
   ).length;
+
+  // Prepare timeline items
+  const timelineItems = useMemo(() => {
+    return documents
+      .filter((doc) => doc.expiresAt)
+      .map((doc) => {
+        const requirement = requirements.find((r) => r.id === doc.requirementId);
+        const daysUntil = differenceInDays(parseISO(doc.expiresAt!), new Date());
+        
+        let status: 'expired' | 'expiring_soon' | 'upcoming' | 'safe' = 'safe';
+        if (daysUntil < 0) status = 'expired';
+        else if (daysUntil <= 30) status = 'expiring_soon';
+        else if (daysUntil <= 90) status = 'upcoming';
+
+        return {
+          id: doc.id,
+          name: requirement?.name || doc.fileName,
+          expiresAt: doc.expiresAt!,
+          status,
+        };
+      })
+      .filter((item) => item.status !== 'safe');
+  }, [documents, requirements]);
+
+  // Prepare category progress data
+  const categoryProgress = useMemo(() => {
+    const categories: { category: string; completed: number; total: number }[] = [];
+    
+    Object.entries(documentsByCategory).forEach(([category, items]) => {
+      const completed = items.filter(
+        (item) => item.document && (item.document.status === 'approved' || item.document.status === 'approved_with_exception')
+      ).length;
+      categories.push({
+        category,
+        completed,
+        total: items.length,
+      });
+    });
+
+    return categories;
+  }, [documentsByCategory]);
 
   const handleMarkAlertRead = useCallback((alertId: string) => {
     markAlertAsRead(alertId);
@@ -82,22 +125,60 @@ const Dashboard = memo(function Dashboard() {
         </div>
         <div className="flex gap-2">
           <Link to="/credentials">
-            <Button variant="outline">
-              <Upload className="w-4 h-4 mr-2" />
+            <Button variant="outline" className="gap-2">
+              <Upload className="w-4 h-4" />
               Upload Documents
             </Button>
           </Link>
-          <Link to="/profile">
-            <Button className="gradient-primary">
-              <User className="w-4 h-4 mr-2" />
-              Complete Profile
+          <Link to="/checklist">
+            <Button className="gradient-primary gap-2 shadow-md hover:shadow-lg transition-shadow">
+              <ClipboardCheck className="w-4 h-4" />
+              View Checklist
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* Clinical Readiness Status */}
-      <ReadinessCard readiness={clinicalReadiness} />
+      {/* Main Readiness Card */}
+      <Card className="overflow-hidden">
+        <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
+          <CardContent className="pt-6">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <CircularProgress
+                value={clinicalReadiness.percentComplete}
+                size={160}
+                strokeWidth={12}
+                label="Clinical Ready"
+              />
+              <div className="flex-1 text-center md:text-left">
+                <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+                  <Shield className="w-6 h-6 text-primary" />
+                  <h2 className="text-xl font-semibold">Clinical Readiness Status</h2>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  {clinicalReadiness.isReady
+                    ? 'Congratulations! You are ready for your clinical rotation.'
+                    : `Complete ${clinicalReadiness.totalRequired - clinicalReadiness.totalCompleted} more requirements to become clinical-ready.`}
+                </p>
+                <div className="flex flex-wrap gap-4 justify-center md:justify-start text-sm">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-success" />
+                    <span>{clinicalReadiness.totalCompleted} Approved</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="w-4 h-4 text-primary" />
+                    <span>{clinicalReadiness.totalPending} Pending</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <AlertTriangle className="w-4 h-4 text-warning" />
+                    <span>{clinicalReadiness.totalExpiring} Expiring</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </div>
+      </Card>
 
       {/* Quick Stats */}
       <div className="grid gap-4 md:grid-cols-4">
@@ -106,29 +187,38 @@ const Dashboard = memo(function Dashboard() {
           label="Approved"
           value={clinicalReadiness.totalCompleted}
           trend={`of ${clinicalReadiness.totalRequired} required`}
-          color="success"
+          colorClass="bg-success/10"
         />
         <QuickStatCard
           icon={<Clock className="w-5 h-5 text-primary" />}
           label="Pending Review"
           value={clinicalReadiness.totalPending}
-          color="primary"
+          colorClass="bg-primary/10"
         />
         <QuickStatCard
           icon={<AlertTriangle className="w-5 h-5 text-warning" />}
           label="Expiring Soon"
           value={clinicalReadiness.totalExpiring}
-          color="warning"
+          colorClass="bg-warning/10"
         />
         <QuickStatCard
           icon={<FileCheck className="w-5 h-5 text-muted-foreground" />}
           label="Need Upload"
           value={pendingUploads}
-          color="muted"
+          colorClass="bg-muted"
         />
       </div>
 
       {/* Two Column Layout */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Timeline */}
+        <ExpirationTimeline items={timelineItems} />
+
+        {/* Category Progress */}
+        <CategoryProgress categories={categoryProgress} />
+      </div>
+
+      {/* Alerts & Profile Row */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Alerts */}
         <AlertsPanel alerts={alerts} onMarkAsRead={handleMarkAlertRead} />
@@ -195,9 +285,9 @@ const Dashboard = memo(function Dashboard() {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <Link to="/credentials" className="block">
-              <div className="p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+              <div className="p-4 border rounded-lg hover:bg-muted/50 hover:border-primary/30 transition-all cursor-pointer group">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/10 rounded-lg">
+                  <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
                     <Upload className="w-5 h-5 text-primary" />
                   </div>
                   <div>
@@ -210,16 +300,16 @@ const Dashboard = memo(function Dashboard() {
               </div>
             </Link>
 
-            <Link to="/profile" className="block">
-              <div className="p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+            <Link to="/checklist" className="block">
+              <div className="p-4 border rounded-lg hover:bg-muted/50 hover:border-primary/30 transition-all cursor-pointer group">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-secondary/10 rounded-lg">
-                    <User className="w-5 h-5 text-secondary" />
+                  <div className="p-2 bg-secondary/10 rounded-lg group-hover:bg-secondary/20 transition-colors">
+                    <ClipboardCheck className="w-5 h-5 text-secondary" />
                   </div>
                   <div>
-                    <p className="font-medium">Update Profile</p>
+                    <p className="font-medium">Ready Checklist</p>
                     <p className="text-sm text-muted-foreground">
-                      {profileCompleteness}% complete
+                      Verify clinical readiness
                     </p>
                   </div>
                 </div>
@@ -227,9 +317,9 @@ const Dashboard = memo(function Dashboard() {
             </Link>
 
             <Link to="/alerts" className="block">
-              <div className="p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer">
+              <div className="p-4 border rounded-lg hover:bg-muted/50 hover:border-primary/30 transition-all cursor-pointer group">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-warning/10 rounded-lg">
+                  <div className="p-2 bg-warning/10 rounded-lg group-hover:bg-warning/20 transition-colors">
                     <AlertTriangle className="w-5 h-5 text-warning" />
                   </div>
                   <div>
