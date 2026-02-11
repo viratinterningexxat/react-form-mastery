@@ -20,6 +20,7 @@ import Students from "./pages/Students";
 import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import SharedProfile from "./pages/SharedProfile";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
