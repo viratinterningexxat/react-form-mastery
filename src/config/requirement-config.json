@@ -1,0 +1,113 @@
+[
+  {
+    "requirementId": "vaccination_hepatitis_a",
+    "label": "Hepatitis A Vaccination",
+    "category": "VACCINATION",
+    "fields": {
+      "doseNumber": {
+        "visible": true,
+        "required": true,
+        "type": "number"
+      },
+      "expiryDate": {
+        "visible": true,
+        "required": true,
+        "type": "date",
+        "autoPopulate": "OCR_EXPIRY_DATE"
+      },
+      "resultDate": {
+        "visible": true,
+        "required": false,
+        "type": "date"
+      },
+      "testType": {
+        "visible": false,
+        "required": false,
+        "type": "select"
+      },
+      "documentUpload": {
+        "visible": true,
+        "required": true,
+        "type": "file"
+      }
+    }
+  },
+  {
+    "requirementId": "vaccination_hepatitis_b",
+    "label": "Hepatitis B Vaccination",
+    "category": "VACCINATION",
+    "fields": {
+      "doseNumber": {
+        "visible": true,
+        "required": true,
+        "type": "number"
+      },
+      "expiryDate": {
+        "visible": true,
+        "required": true,
+        "type": "date",
+        "autoPopulate": "OCR_EXPIRY_DATE"
+      },
+      "resultDate": {
+        "visible": true,
+        "required": false,
+        "type": "date"
+      },
+      "documentUpload": {
+        "visible": true,
+        "required": true,
+        "type": "file"
+      }
+    }
+  },
+  {
+    "requirementId": "blood_test_tb",
+    "label": "TB Blood Test",
+    "category": "BLOOD_TEST",
+    "fields": {
+      "resultDate": {
+        "visible": true,
+        "required": true,
+        "type": "date"
+      },
+      "expiryDate": {
+        "visible": true,
+        "required": false,
+        "type": "date"
+      },
+      "testType": {
+        "visible": true,
+        "required": true,
+        "type": "select",
+        "options": ["T-Spot", "Gold/QuantiFERON"]
+      },
+      "documentUpload": {
+        "visible": true,
+        "required": true,
+        "type": "file"
+      }
+    }
+  },
+  {
+    "requirementId": "chest_xray",
+    "label": "Chest X-Ray",
+    "category": "SCREENING",
+    "fields": {
+      "resultDate": {
+        "visible": true,
+        "required": true,
+        "type": "date"
+      },
+      "expiryDate": {
+        "visible": true,
+        "required": false,
+        "type": "date"
+      },
+      "documentUpload": {
+        "visible": true,
+        "required": true,
+        "type": "file"
+      }
+    }
+  }
+]

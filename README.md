@@ -1,73 +1,168 @@
-# Welcome to your Lovable project
+# React Form Mastery - Config-Driven Credential Management System
 
-## Project info
+A sophisticated React application for managing clinical credentials with dynamic, config-driven forms, OCR integration, and admin controls.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🏗️ Architecture Overview
 
-## How can I edit this code?
+This application demonstrates a **config-driven architecture** where form behavior, validation, and UI rendering are controlled by JSON configuration files. This approach allows for:
 
-There are several ways of editing your application.
+- **Zero-code changes** to add/modify requirements
+- **Dynamic form rendering** based on visibility flags
+- **Flexible validation** rules
+- **Scalable requirement management**
 
-**Use Lovable**
+### Key Design Decisions
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- **Visibility controls UI rendering**: Fields only appear if `visible: true`
+- **Required controls validation**: Mandatory fields block submission
+- **OCR is assistive, not mandatory**: Auto-fills fields but allows manual override
+- **Config is backend/admin-driven**: UI adapts without code changes
 
-Changes made via Lovable will be committed automatically to this repo.
+## 📊 Data Flow
 
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+Config JSON → Requirement Types → Dynamic Form → Validation Engine → Submit
+     ↓              ↓                    ↓              ↓
+   Admin UI    Field Rendering     OCR Processing   Error Handling
 ```
 
-**Edit a file directly in GitHub**
+### OCR Flow
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+Upload Document → Tesseract OCR → Text Parsing → Field Mapping → Auto-Fill Form
+       ↓                ↓              ↓              ↓              ↓
+   File Input      Extract Text   Regex Patterns   Config Mapping   User Override
+```
 
-**Use GitHub Codespaces**
+## 🚀 Features Implemented
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Core Features
+- ✅ **Requirement-level config schema** (`src/config/requirement-config.json`)
+- ✅ **Field visibility flags** (dynamic rendering)
+- ✅ **Mandatory vs optional fields** (validation blocking)
+- ✅ **Dynamic form rendering** (VaccinationForm component)
+- ✅ **Config-driven validation** (validationEngine utility)
+- ✅ **Disable submit on missing required fields** (FormFooter component)
 
-## What technologies are used for this project?
+### OCR & Upload
+- ✅ **Upload → OCR → auto-fill** (DocumentUploader component)
+- ✅ **Manual override** (user can edit auto-filled values)
+- ✅ **OCR failure handling** (graceful fallback with error alerts)
 
-This project is built with:
+### Admin & Scalability
+- ✅ **Mock admin config UI** (AdminConfigPreview page)
+- ✅ **JSON-based rule engine** (requirement-config.json)
+- ✅ **Role/requirement extensibility** (modular config structure)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### UX & Polish
+- ✅ **Error states** (field highlighting, validation messages)
+- ✅ **Clear hook abstraction** (useDocumentProcessor)
+- ✅ **Loading states** (progress bars for OCR)
 
-## How can I deploy this project?
+## 🛠️ Technical Implementation
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Configuration Schema
 
-## Can I connect a custom domain to my Lovable project?
+```json
+{
+  "requirementId": "vaccination_hepatitis_a",
+  "label": "Hepatitis A Vaccination",
+  "category": "VACCINATION",
+  "fields": {
+    "doseNumber": {
+      "visible": true,
+      "required": true,
+      "type": "number"
+    },
+    "expiryDate": {
+      "visible": true,
+      "required": true,
+      "type": "date",
+      "autoPopulate": "OCR_EXPIRY_DATE"
+    }
+  }
+}
+```
 
-Yes, you can!
+### Key Components
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **VaccinationForm**: Renders fields dynamically based on config
+- **DocumentUploader**: Handles file upload and OCR processing
+- **FormFooter**: Manages submit button state based on validation
+- **AdminConfigPreview**: Mock admin interface for config management
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+### Utilities
+
+- **validationEngine.ts**: Config-driven validation logic
+- **ocrMapper.ts**: Maps OCR data to form fields
+- **getRequirementConfig.ts**: Safe config loading
+
+## 🚀 Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## 🎯 Interview Talking Points
+
+### Config-Driven Design
+- **Why?** Eliminates hardcoding, enables rapid iteration
+- **How?** JSON schema defines UI behavior
+- **Benefits?** Admin can modify requirements without developer intervention
+
+### OCR Integration
+- **Pipeline**: Upload → OCR → Parse → Map → Fill
+- **Fallback**: Graceful degradation when OCR fails
+- **UX**: Progress indicators, error handling, manual override
+
+### Validation Strategy
+- **Dynamic Rules**: Based on config flags
+- **Real-time Feedback**: Field-level error highlighting
+- **Submit Blocking**: Prevents invalid submissions
+
+### Scalability
+- **Modular Config**: Easy to add new requirement types
+- **Type Safety**: TypeScript interfaces ensure config validity
+- **Performance**: Lazy loading and efficient re-renders
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   ├── forms/
+│   │   ├── VaccinationForm.tsx
+│   │   └── FormFooter.tsx
+│   └── upload/
+│       └── DocumentUploader.tsx
+├── config/
+│   └── requirement-config.json
+├── hooks/
+│   └── useDocumentProcessor.ts
+├── pages/
+│   └── AdminConfigPreview.tsx
+├── types/
+│   └── RequirementConfig.ts
+└── utils/
+    ├── validationEngine.ts
+    ├── ocrMapper.ts
+    └── getRequirementConfig.ts
+```
+
+## 🔧 Technologies Used
+
+- **React 18** with TypeScript
+- **Vite** for build tooling
+- **ShadCN UI** for components
+- **Tesseract.js** for OCR
+- **React Hook Form** for form management
+- **Tailwind CSS** for styling
+
+This implementation showcases advanced React patterns, config-driven architecture, and practical OCR integration - perfect for demonstrating senior-level frontend skills in interviews.

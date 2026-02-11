@@ -1,5 +1,5 @@
 import { memo, ReactNode } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -10,11 +10,16 @@ import {
   Shield,
   Menu,
   ClipboardCheck,
+  Users,
+  BarChart3,
+  Settings,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useCallback } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -61,10 +66,61 @@ const Navigation = memo(function Navigation({
   alertCount?: number; 
   onItemClick?: () => void;
 }) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    onItemClick?.();
+  };
+
+  if (user?.role === 'approver') {
+    return (
+      <nav className="space-y-1">
+        <NavItem
+          to="/dashboard"
+          icon={<LayoutDashboard className="w-5 h-5" />}
+          label="Review Portal"
+          onClick={onItemClick}
+        />
+        <NavItem
+          to="/students"
+          icon={<Users className="w-5 h-5" />}
+          label="All Students"
+          onClick={onItemClick}
+        />
+        <NavItem
+          to="/reports"
+          icon={<BarChart3 className="w-5 h-5" />}
+          label="Reports"
+          onClick={onItemClick}
+        />
+        <NavItem
+          to="/settings"
+          icon={<Settings className="w-5 h-5" />}
+          label="Settings"
+          onClick={onItemClick}
+        />
+        <div className="pt-4 border-t">
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50"
+            onClick={handleLogout}
+          >
+            <LogOut className="w-5 h-5" />
+            <span>Logout</span>
+          </Button>
+        </div>
+      </nav>
+    );
+  }
+
+  // Student navigation
   return (
     <nav className="space-y-1">
       <NavItem
-        to="/"
+        to="/student/home"
         icon={<LayoutDashboard className="w-5 h-5" />}
         label="Dashboard"
         onClick={onItemClick}
@@ -94,16 +150,33 @@ const Navigation = memo(function Navigation({
         badge={alertCount}
         onClick={onItemClick}
       />
+      <div className="pt-4 border-t">
+        <Button
+          variant="ghost"
+          className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50"
+          onClick={handleLogout}
+        >
+          <LogOut className="w-5 h-5" />
+          <span>Logout</span>
+        </Button>
+      </div>
     </nav>
   );
 });
 
 export const AppLayout = memo(function AppLayout({ children, alertCount }: AppLayoutProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleMobileItemClick = useCallback(() => {
     setMobileOpen(false);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -154,6 +227,22 @@ export const AppLayout = memo(function AppLayout({ children, alertCount }: AppLa
                 )}
               </Button>
             </NavLink>
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg">
+              <User className="w-4 h-4" />
+              <span className="text-sm font-medium">{user?.name}</span>
+              <Badge variant="outline" className="text-xs">
+                {user?.role}
+              </Badge>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleLogout}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </Button>
           </div>
         </div>
       </header>

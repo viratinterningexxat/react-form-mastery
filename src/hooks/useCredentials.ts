@@ -251,6 +251,26 @@ export function useCredentials() {
     [alerts]
   );
 
+  // Update document status (for approvers)
+  const updateDocumentStatus = useCallback(
+    (documentId: string, status: DocumentStatus, notes?: string) => {
+      setDocuments((prev) =>
+        prev.map((doc) =>
+          doc.id === documentId
+            ? {
+                ...doc,
+                status,
+                reviewNotes: notes,
+                reviewedAt: new Date().toISOString(),
+                reviewedBy: 'Approver', // In real app, get from auth context
+              }
+            : doc
+        )
+      );
+    },
+    [setDocuments]
+  );
+
   return {
     documents,
     requirements,
@@ -261,6 +281,7 @@ export function useCredentials() {
     uploadDocument,
     deleteDocument,
     simulateApproval,
+    updateDocumentStatus,
     markAlertAsRead,
     getDocumentForRequirement,
     calculateAlerts,
