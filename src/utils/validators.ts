@@ -23,6 +23,10 @@ export const validateNumber = (value: number, min?: number, max?: number): boole
   return true;
 };
 
-export const validateArrayMinLength = (arr: any[], minLength: number): boolean => {
-  return arr.filter(item => item && item.toString().trim().length > 0).length >= minLength;
+export const validateArrayMinLength = (arr: unknown[], minLength: number): boolean => {
+  return arr.filter(item => {
+    if (typeof item === 'string') return item.trim().length > 0;
+    if (item !== null && item !== undefined) return item.toString().trim().length > 0;
+    return false;
+  }).length >= minLength;
 };

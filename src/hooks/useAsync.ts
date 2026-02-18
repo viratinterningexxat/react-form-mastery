@@ -69,11 +69,13 @@ export function useAsync<T, P extends unknown[] = []>(
   // Track mounted state to prevent state updates after unmount
   const mountedRef = useRef(true);
   const asyncFnRef = useRef(asyncFunction);
+  const optionsRef = useRef(options);
 
-  // Keep ref updated with latest async function
+  // Keep refs updated with latest values
   useEffect(() => {
     asyncFnRef.current = asyncFunction;
-  }, [asyncFunction]);
+    optionsRef.current = options;
+  }, [asyncFunction, options]);
 
   // Track component mount state
   useEffect(() => {
@@ -93,7 +95,7 @@ export function useAsync<T, P extends unknown[] = []>(
       
       if (mountedRef.current) {
         setState({ status: 'success', data: result, error: null });
-        onSuccess?.(result);
+        optionsRef.current.onSuccess?.(result);
         logger.debug('useAsync: Success', { result }, 'useAsync');
       }
       
@@ -103,15 +105,15 @@ export function useAsync<T, P extends unknown[] = []>(
       
       if (mountedRef.current) {
         setState({ status: 'error', data: null, error });
-        onError?.(error);
+        optionsRef.current.onError?.(error);
         logger.error('useAsync: Error', error, 'useAsync');
       }
       
       return null;
     } finally {
-      onSettled?.();
+      optionsRef.current.onSettled?.();
     }
-  }, [onSuccess, onError, onSettled]);
+  }, []);
 
   const reset = useCallback(() => {
     setState({ status: 'idle', data: null, error: null });
@@ -126,7 +128,8 @@ export function useAsync<T, P extends unknown[] = []>(
     if (immediate && immediateArgs) {
       execute(...immediateArgs);
     }
-  }, [immediate]); // Only on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [immediate]); // Only on mount/immediate change
 
   return {
     ...state,

@@ -7,7 +7,7 @@ import { User, Mail, Phone } from 'lucide-react';
 interface StepPersonalProps {
   values: EmployeeFormData;
   errors: FormErrors;
-  onChange: (name: keyof EmployeeFormData, value: any) => void;
+  onChange: (name: keyof EmployeeFormData, value: unknown) => void;
 }
 
 export function StepPersonal({ values, errors, onChange }: StepPersonalProps) {

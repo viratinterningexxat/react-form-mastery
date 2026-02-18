@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react';
 import { extractTextFromImage, parseExtractedText } from '@/utils/ocrExtractor';
-import { ExtractedDocumentData } from '@/types/formConfig';
+import { ExtractedDocumentData, MappedFieldData } from '@/types/formConfig';
+import { mapExtractedDataToFields } from '@/utils/ocrMapper';
 import { toast } from 'sonner';
 
 interface UseDocumentProcessorOptions {
-  onDataExtracted?: (data: Partial<Record<string, any>>) => void;
+  onDataExtracted?: (data: MappedFieldData) => void;
   onError?: (error: string) => void;
 }
 
@@ -45,28 +46,4 @@ export function useDocumentProcessor(options: UseDocumentProcessorOptions = {}) 
     isProcessing,
     progress,
   };
-}
-
-function mapExtractedDataToFields(extractedData: ExtractedDocumentData): Partial<Record<string, any>> {
-  const mapped: Partial<Record<string, any>> = {};
-
-  if (extractedData.expiryDate) {
-    mapped.expiryDate = extractedData.expiryDate;
-  }
-
-  if (extractedData.doseDate) {
-    mapped.resultDate = extractedData.doseDate;
-  }
-
-  if (extractedData.lotNumber) {
-    mapped.lotNumber = extractedData.lotNumber;
-  }
-
-  if (extractedData.manufacturer) {
-    mapped.manufacturer = extractedData.manufacturer;
-  }
-
-  // Add more mappings as needed
-
-  return mapped;
 }

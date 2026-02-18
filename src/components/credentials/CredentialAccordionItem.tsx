@@ -198,7 +198,7 @@ export const CredentialAccordionItem = memo(function CredentialAccordionItem({
             
             {/* Status badge */}
             <Badge 
-              variant={document ? getStatusColor(document.status) as any : 'secondary'}
+              variant={document ? getStatusColor(document.status) : 'secondary'}
               className="min-w-[80px] justify-center text-xs"
             >
               {document ? getStatusLabel(document.status) : 'Pending'}

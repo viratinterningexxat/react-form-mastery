@@ -133,3 +133,5 @@ export interface ExtractedDocumentData {
   numbers: string[];
   rawText: string;
 }
+
+export type MappedFieldData = Partial<Record<string, string | string[]>>;

@@ -130,7 +130,7 @@ export const CredentialCard = memo(function CredentialCard({
             {getStatusIcon()}
             <CardTitle className="text-base font-medium">{requirement.name}</CardTitle>
           </div>
-          <Badge variant={document ? getStatusColor(document.status) as any : 'secondary'}>
+          <Badge variant={document ? getStatusColor(document.status) : 'secondary'}>
             {document ? getStatusLabel(document.status) : 'Not Uploaded'}
           </Badge>
         </div>
