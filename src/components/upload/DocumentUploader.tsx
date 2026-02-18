@@ -5,9 +5,10 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { useDocumentProcessor } from '@/hooks/useDocumentProcessor';
 import { Upload, FileText, Loader2 } from 'lucide-react';
+import { MappedFieldData } from '@/types/formConfig';
 
 interface DocumentUploaderProps {
-  onDataExtracted: (data: Partial<Record<string, any>>) => void;
+  onDataExtracted: (data: MappedFieldData) => void;
   onError: (error: string) => void;
   accept?: string;
   label?: string;

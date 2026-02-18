@@ -9,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { DynamicFormSection } from '@/components/credentials/DynamicFormSection';
-import { SectionKey, SectionConfig, SectionFormData } from '@/types/formConfig';
+import { SectionKey, SectionConfig, SectionFormData, RequirementConfig as FormRequirementConfig } from '@/types/formConfig';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import requirementConfig from '@/data/requirement-config.json';
 import { 
@@ -89,8 +89,11 @@ const Credentials = memo(function Credentials() {
 
   // Get section config safely
   const getSectionConfig = (key: SectionKey): SectionConfig | null => {
-    const config = (requirementConfig as any)[key];
-    return config?.enabled ? config : null;
+    const config = (requirementConfig as unknown as FormRequirementConfig)[key];
+    if (typeof config === 'object' && config !== null && 'enabled' in config) {
+      return (config as SectionConfig).enabled ? (config as SectionConfig) : null;
+    }
+    return null;
   };
 
   // Calculate overall progress

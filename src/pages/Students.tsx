@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCredentials } from '@/hooks/useCredentials';
+import { CredentialDocument } from '@/types/credential';
 import {
   Users,
   Search,
@@ -17,6 +18,24 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 
+interface StudentCredential extends CredentialDocument {
+  studentId?: string;
+  studentName?: string;
+}
+
+interface StudentData {
+  id: string;
+  name: string;
+  program: string;
+  school: string;
+  credentials: StudentCredential[];
+  totalRequired: number;
+  approvedCount: number;
+  pendingCount: number;
+  rejectedCount: number;
+  expiringCount: number;
+}
+
 export default function Students() {
   const { documents, requirements } = useCredentials();
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,9 +44,9 @@ export default function Students() {
 
   // Group documents by student
   const studentsData = useMemo(() => {
-    const studentMap = new Map();
+    const studentMap = new Map<string, StudentData>();
 
-    documents.forEach((doc) => {
+    (documents as StudentCredential[]).forEach((doc) => {
       const studentId = doc.studentId || 'unknown';
       const studentName = doc.studentName || 'Unknown Student';
 
@@ -46,13 +65,13 @@ export default function Students() {
         });
       }
 
-      const student = studentMap.get(studentId);
+      const student = studentMap.get(studentId)!;
       student.credentials.push(doc);
 
       // Count by status
       if (doc.status === 'approved' || doc.status === 'approved_with_exception') {
         student.approvedCount++;
-      } else if (doc.status === 'pending') {
+      } else if (doc.status === 'pending_review') {
         student.pendingCount++;
       } else if (doc.status === 'rejected') {
         student.rejectedCount++;
@@ -87,7 +106,7 @@ export default function Students() {
     });
   }, [studentsData, searchTerm, statusFilter, programFilter]);
 
-  const getReadinessStatus = (student: any) => {
+  const getReadinessStatus = (student: StudentData) => {
     if (student.approvedCount === student.totalRequired) {
       return { status: 'Complete', color: 'bg-green-500', icon: CheckCircle };
     } else if (student.pendingCount > 0) {

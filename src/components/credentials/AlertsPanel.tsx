@@ -34,7 +34,7 @@ export const AlertsPanel = memo(function AlertsPanel({ alerts, onMarkAsRead }: A
     }
   };
 
-  const getSeverityColor = (severity: ExpirationAlert['severity']) => {
+  const getSeverityColor = (severity: ExpirationAlert['severity']): "destructive" | "warning" | "secondary" => {
     switch (severity) {
       case 'critical':
         return 'destructive';
@@ -110,7 +110,7 @@ export const AlertsPanel = memo(function AlertsPanel({ alerts, onMarkAsRead }: A
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant={getSeverityColor(alert.severity) as any} className="text-xs">
+                    <Badge variant={getSeverityColor(alert.severity)} className="text-xs">
                       {alert.severity}
                     </Badge>
                     {!alert.isRead && (

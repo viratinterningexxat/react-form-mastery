@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { useCredentials } from '@/hooks/useCredentials';
+import { CredentialDocument, DocumentStatus } from '@/types/credential';
 import {
   CheckCircle,
   XCircle,
@@ -19,8 +20,14 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 
+interface ReviewDocument extends CredentialDocument {
+  studentName?: string;
+  requirementName?: string;
+  submittedAt: string;
+}
+
 interface ReviewDialogProps {
-  document: any;
+  document: ReviewDocument;
   onApprove: (id: string, notes?: string) => void;
   onApproveWithException: (id: string, notes: string) => void;
   onReject: (id: string, reason: string) => void;
@@ -138,19 +145,31 @@ function ReviewDialog({ document, onApprove, onApproveWithException, onReject }:
 }
 
 export default function ApproverDashboard() {
-  const { documents, updateDocumentStatus } = useCredentials();
+  const { documents, requirements, updateDocumentStatus } = useCredentials();
+
+  const enrichedDocuments = useMemo(() => {
+    return documents.map(doc => {
+      const requirement = requirements.find(r => r.id === doc.requirementId);
+      return {
+        ...doc,
+        requirementName: requirement?.name || 'Unknown Requirement',
+        studentName: 'Virat Gandhi', // Mock data
+        submittedAt: doc.uploadedAt,
+      } as ReviewDocument;
+    });
+  }, [documents, requirements]);
 
   const stats = useMemo(() => {
-    const pending = documents.filter(doc => doc.status === 'pending').length;
-    const approved = documents.filter(doc => doc.status === 'approved' || doc.status === 'approved_with_exception').length;
-    const rejected = documents.filter(doc => doc.status === 'rejected').length;
-    const total = documents.length;
+    const pending = enrichedDocuments.filter(doc => doc.status === 'pending_review').length;
+    const approved = enrichedDocuments.filter(doc => doc.status === 'approved' || doc.status === 'approved_with_exception').length;
+    const rejected = enrichedDocuments.filter(doc => doc.status === 'rejected').length;
+    const total = enrichedDocuments.length;
 
     return { pending, approved, rejected, total };
-  }, [documents]);
+  }, [enrichedDocuments]);
 
-  const pendingDocuments = documents.filter(doc => doc.status === 'pending');
-  const reviewedDocuments = documents.filter(doc => doc.status !== 'pending');
+  const pendingDocuments = enrichedDocuments.filter(doc => doc.status === 'pending_review');
+  const reviewedDocuments = enrichedDocuments.filter(doc => doc.status !== 'pending_review');
 
   const handleApprove = (docId: string, notes?: string) => {
     updateDocumentStatus(docId, 'approved', notes);

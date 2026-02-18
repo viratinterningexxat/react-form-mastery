@@ -8,7 +8,7 @@ import { Plus, X, Sparkles } from 'lucide-react';
 interface StepSkillsProps {
   values: EmployeeFormData;
   errors: FormErrors;
-  onChange: (name: keyof EmployeeFormData, value: any) => void;
+  onChange: (name: keyof EmployeeFormData, value: unknown) => void;
 }
 
 export function StepSkills({ values, errors, onChange }: StepSkillsProps) {

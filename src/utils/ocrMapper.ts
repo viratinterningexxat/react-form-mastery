@@ -1,31 +1,25 @@
-import { ExtractedDocumentData } from '@/types/formConfig';
+import { ExtractedDocumentData, MappedFieldData } from '@/types/formConfig';
+import { normalizeDate, matchManufacturer } from './ocrExtractor';
 
-export function mapExtractedDataToFields(extractedData: ExtractedDocumentData): Partial<Record<string, any>> {
-  const mapped: Partial<Record<string, any>> = {};
+export function mapExtractedDataToFields(extractedData: ExtractedDocumentData): MappedFieldData {
+  const mapped: MappedFieldData = {};
 
-  // Map expiry date
-  if (extractedData.expiryDate) {
-    mapped.expiryDate = extractedData.expiryDate;
-  }
-
-  // Map dose/result date
-  if (extractedData.doseDate) {
-    mapped.resultDate = extractedData.doseDate;
+  // Map dose/result date (usually the most recent or first found date)
+  if (extractedData.dates.length > 0) {
+    const normalized = normalizeDate(extractedData.dates[0]);
+    if (normalized) {
+      mapped.resultDate = normalized;
+    }
   }
 
   // Map lot number
-  if (extractedData.lotNumber) {
-    mapped.lotNumber = extractedData.lotNumber;
+  if (extractedData.lotNumbers.length > 0) {
+    mapped.lotNumber = extractedData.lotNumbers[0];
   }
 
   // Map manufacturer
-  if (extractedData.manufacturer) {
-    mapped.manufacturer = extractedData.manufacturer;
-  }
-
-  // Map dose number if available
-  if (extractedData.doseNumber) {
-    mapped.doseNumber = extractedData.doseNumber;
+  if (extractedData.manufacturers.length > 0) {
+    mapped.manufacturer = matchManufacturer(extractedData.manufacturers[0]);
   }
 
   return mapped;

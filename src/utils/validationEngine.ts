@@ -7,7 +7,7 @@ export interface ValidationError {
 
 export function validateFormData(
   requirement: RequirementConfig,
-  formData: Record<string, any>
+  formData: Record<string, string | number | boolean | File | string[] | undefined | null>
 ): ValidationError[] {
   const errors: ValidationError[] = [];
 

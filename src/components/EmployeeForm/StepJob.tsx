@@ -8,7 +8,7 @@ import { Building2, Briefcase, Clock } from 'lucide-react';
 interface StepJobProps {
   values: EmployeeFormData;
   errors: FormErrors;
-  onChange: (name: keyof EmployeeFormData, value: any) => void;
+  onChange: (name: keyof EmployeeFormData, value: unknown) => void;
 }
 
 export function StepJob({ values, errors, onChange }: StepJobProps) {

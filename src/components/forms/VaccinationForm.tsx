@@ -6,7 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { RequirementConfig } from '@/types/RequirementConfig';
+import { RequirementConfig, FieldConfig } from '@/types/RequirementConfig';
+import { MappedFieldData } from '@/types/formConfig';
 import { validateFormData, ValidationError } from '@/utils/validationEngine';
 import { FormFooter } from './FormFooter';
 import { DocumentUploader } from '@/components/upload/DocumentUploader';
@@ -16,15 +17,15 @@ import { cn } from '@/lib/utils';
 
 interface VaccinationFormProps {
   requirement: RequirementConfig;
-  onSubmit: (data: Record<string, any>) => void;
+  onSubmit: (data: Record<string, string | number | boolean | File | string[]>) => void;
 }
 
 export function VaccinationForm({ requirement, onSubmit }: VaccinationFormProps) {
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, string | number | boolean | File | string[]>>({});
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleDataExtracted = useCallback((data: Partial<Record<string, any>>) => {
+  const handleDataExtracted = useCallback((data: MappedFieldData) => {
     setFormData(prev => ({ ...prev, ...data }));
   }, []);
 
@@ -32,7 +33,7 @@ export function VaccinationForm({ requirement, onSubmit }: VaccinationFormProps)
     // OCR failure handled in hook
   }, []);
 
-  const handleInputChange = useCallback((field: string, value: any) => {
+  const handleInputChange = useCallback((field: string, value: string | number | boolean | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error for this field
     setErrors(prev => prev.filter(e => e.field !== field));
@@ -58,7 +59,7 @@ export function VaccinationForm({ requirement, onSubmit }: VaccinationFormProps)
     return errors.find(e => e.field === field)?.message;
   };
 
-  const renderField = (fieldKey: string, fieldConfig: any) => {
+  const renderField = (fieldKey: string, fieldConfig: FieldConfig) => {
     if (!fieldConfig.visible) return null;
 
     const isRequired = fieldConfig.required;

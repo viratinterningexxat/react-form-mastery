@@ -220,22 +220,22 @@ export const DEFAULT_REQUIREMENTS: CredentialRequirement[] = [
 ];
 
 // Helper functions
-export function getStatusColor(status: DocumentStatus): string {
+export function getStatusColor(status: DocumentStatus): 'success' | 'warning' | 'default' | 'destructive' | 'secondary' | 'outline' {
   switch (status) {
     case 'approved':
       return 'success';
     case 'approved_with_exception':
       return 'warning';
     case 'pending_review':
-      return 'primary';
+      return 'default';
     case 'pending_upload':
-      return 'muted';
+      return 'secondary';
     case 'rejected':
       return 'destructive';
     case 'expired':
       return 'destructive';
     default:
-      return 'muted';
+      return 'secondary';
   }
 }
 

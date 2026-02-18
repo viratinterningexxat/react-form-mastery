@@ -10,8 +10,8 @@ const MANUFACTURER_PATTERNS = [
 
 // Date patterns (multiple formats)
 const DATE_PATTERNS = [
-  /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/g, // MM/DD/YYYY or DD/MM/YYYY
-  /(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/g,   // YYYY-MM-DD
+  /(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})/g, // MM/DD/YYYY or DD/MM/YYYY
+  /(\d{4})[/-](\d{1,2})[/-](\d{1,2})/g,   // YYYY-MM-DD
   /(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{1,2}),?\s+(\d{4})/gi,
   /(\d{1,2})\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(\d{4})/gi,
 ];
@@ -139,7 +139,7 @@ export function normalizeDate(dateStr: string): string | null {
     }
     
     // Manual parsing for common formats
-    const mmddyyyy = dateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    const mmddyyyy = dateStr.match(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/);
     if (mmddyyyy) {
       const [_, m, d, y] = mmddyyyy;
       return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
