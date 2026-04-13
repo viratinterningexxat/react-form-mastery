@@ -90,6 +90,27 @@ const syncToStorage = () => {
   }
 };
 
+if (mockDatabase.length === 0) {
+  const departments = ['Engineering', 'Design', 'Marketing', 'Sales', 'Human Resources', 'Finance', 'Operations', 'Customer Support'];
+  const roles = ['Software Engineer', 'Product Designer', 'Marketing Manager', 'Sales Representative', 'HR Specialist', 'Accountant', 'Operations Manager', 'Support Agent'];
+  for (let i = 0; i < 10000; i++) {
+    const deptIndex = Math.floor(Math.random() * departments.length);
+    mockDatabase.push({
+      id: crypto.randomUUID(),
+      name: `Mock Employee ${i + 1}`,
+      email: `mock.employee${i + 1}@example.com`,
+      phone: `+1-555-${String(Math.floor(1000 + Math.random() * 9000)).padStart(4, '0')}`,
+      department: departments[deptIndex],
+      role: roles[deptIndex],
+      experience: Math.floor(Math.random() * 15) + 1,
+      skills: ['React', 'TypeScript', 'Node.js'],
+      createdAt: new Date().toISOString(),
+    });
+  }
+  // Try to sync to store if possible, though localstorage may cap at 5MB, which ~10000 records may exceed. Handling gracefully via existing try/catch in syncToStorage.
+  syncToStorage();
+}
+
 /**
  * Employee API Service
  * Simulates real API behavior with mock data

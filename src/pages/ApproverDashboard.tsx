@@ -153,7 +153,7 @@ export default function ApproverDashboard() {
       return {
         ...doc,
         requirementName: requirement?.name || 'Unknown Requirement',
-        studentName: 'Virat Gandhi', // Mock data
+        studentName: doc.studentName,
         submittedAt: doc.uploadedAt,
       } as ReviewDocument;
     });

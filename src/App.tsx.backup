@@ -9,7 +9,7 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import { AppLayout } from "@/components/layout/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import ApproverDashboard from "./pages/ApproverDashboard";
-import { lazy, Suspense } from 'react';
+import ClinicalDashboard from "./pages/ClinicalDashboard";
 import Credentials from "./pages/Credentials";
 import Profile from "./pages/Profile";
 import Alerts from "./pages/Alerts";
@@ -22,8 +22,6 @@ import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import SharedProfile from "./pages/SharedProfile";
 import NotFound from "./pages/NotFound";
-
-const ClinicalDashboard = lazy(() => import('./pages/ClinicalDashboard'));
 
 const queryClient = new QueryClient();
 
@@ -96,12 +94,9 @@ function AppRoutes() {
         } />
         <Route path="/clinical/home" element={
           <ProtectedRoute allowedRoles={['clinical_site']}>
-            <Suspense fallback={<div>Loading clinical dashboard...</div>}>
-              <ClinicalDashboard />
-            </Suspense>
+            <ClinicalDashboard />
           </ProtectedRoute>
         } />
-
         <Route path="/credentials" element={
           <ProtectedRoute allowedRoles={['student']}>
             <Credentials />
@@ -115,11 +110,6 @@ function AppRoutes() {
         <Route path="/clinical/settings" element={
           <ProtectedRoute allowedRoles={['clinical_site']}>
             <Settings />
-          </ProtectedRoute>
-        } />
-        <Route path="/admin" element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <Dashboard />
           </ProtectedRoute>
         } />
         <Route path="/alerts" element={

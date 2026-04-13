@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,26 +7,29 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 215 25% 15%;
+    /* Exxat Gradient Mesh / Soft Sky & Blush for glassmorphism BG */
+    --background: 207 100% 98%; 
+    --foreground: 203 100% 16%; /* Exxat Navy text */
 
     --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card-foreground: 203 100% 16%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover-foreground: 203 100% 16%;
 
-    --primary: 212 72% 45%;
+    /* Exxat Pink as Primary */
+    --primary: 332 78% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 175 45% 45%;
+    /* Exxat Navy as Secondary */
+    --secondary: 203 100% 16%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 15% 94%;
-    --muted-foreground: 215 15% 45%;
+    --muted: 207 20% 92%;
+    --muted-foreground: 203 30% 45%;
 
-    --accent: 212 72% 95%;
-    --accent-foreground: 212 72% 35%;
+    --accent: 336 83% 95%; /* Light blush */
+    --accent-foreground: 332 78% 30%;
 
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
@@ -36,69 +40,70 @@
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 214 20% 88%;
-    --input: 214 20% 88%;
-    --ring: 212 72% 45%;
+    --border: 207 30% 86%;
+    --input: 207 30% 86%;
+    --ring: 332 78% 50%; /* Pink focus rings */
 
-    --radius: 0.625rem;
+    --radius: 1rem; /* Softer, larger radius for glass vibe */
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 203 100% 16%;
+    --sidebar-primary: 332 78% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 336 83% 95%;
+    --sidebar-accent-foreground: 332 78% 50%;
+    --sidebar-border: 207 30% 90%;
+    --sidebar-ring: 332 78% 50%;
 
-    --step-active: 212 72% 45%;
+    --step-active: 332 78% 50%;
     --step-completed: 145 65% 42%;
-    --step-pending: 210 15% 85%;
+    --step-pending: 207 20% 85%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(212 72% 45%), hsl(200 70% 50%));
-    --gradient-hero: linear-gradient(135deg, hsl(212 72% 45%) 0%, hsl(175 45% 45%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(332 78% 50%), hsl(340 85% 65%));
+    --gradient-hero: linear-gradient(135deg, hsl(207 100% 96%) 0%, hsl(336 83% 95%) 100%);
 
-    --shadow-sm: 0 1px 2px 0 hsl(215 25% 15% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(215 25% 15% / 0.08), 0 2px 4px -2px hsl(215 25% 15% / 0.06);
-    --shadow-lg: 0 10px 15px -3px hsl(215 25% 15% / 0.1), 0 4px 6px -4px hsl(215 25% 15% / 0.1);
-    --shadow-card: 0 1px 3px 0 hsl(215 25% 15% / 0.08), 0 1px 2px -1px hsl(215 25% 15% / 0.08);
+    /* Soft, diffused glass shadows */
+    --shadow-sm: 0 2px 4px 0 hsl(203 100% 16% / 0.05);
+    --shadow-md: 0 8px 16px -2px hsl(203 100% 16% / 0.08), 0 4px 8px -4px hsl(203 100% 16% / 0.05);
+    --shadow-lg: 0 16px 32px -4px hsl(203 100% 16% / 0.1), 0 8px 16px -8px hsl(203 100% 16% / 0.08);
+    --shadow-card: 0 8px 24px -4px hsl(203 100% 16% / 0.08), 0 4px 12px -6px hsl(203 100% 16% / 0.04);
   }
 
   .dark {
-    --background: 215 25% 10%;
-    --foreground: 210 20% 98%;
+    /* Muted navy for dark glass */
+    --background: 203 60% 8%;
+    --foreground: 207 100% 96%;
 
-    --card: 215 25% 13%;
-    --card-foreground: 210 20% 98%;
+    --card: 203 50% 12%;
+    --card-foreground: 207 100% 96%;
 
-    --popover: 215 25% 13%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 203 50% 12%;
+    --popover-foreground: 207 100% 96%;
 
-    --primary: 212 72% 55%;
+    --primary: 332 85% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 175 45% 50%;
+    --secondary: 203 40% 25%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 215 20% 18%;
-    --muted-foreground: 215 15% 60%;
+    --muted: 203 30% 20%;
+    --muted-foreground: 207 30% 65%;
 
-    --accent: 212 50% 20%;
-    --accent-foreground: 212 72% 70%;
+    --accent: 332 50% 20%; /* Darker blush accent */
+    --accent-foreground: 332 85% 80%;
 
-    --destructive: 0 62% 45%;
-    --destructive-foreground: 0 0% 100%;
-
-    --success: 145 55% 45%;
-    --success-foreground: 0 0% 100%;
-
-    --border: 215 20% 22%;
-    --input: 215 20% 22%;
-    --ring: 212 72% 55%;
-
-    --step-active: 212 72% 55%;
-    --step-completed: 145 55% 45%;
-    --step-pending: 215 15% 30%;
+    --border: 203 40% 20%;
+    --input: 203 40% 20%;
+    --ring: 332 85% 60%;
+    
+    --sidebar-background: 203 60% 8%;
+    --sidebar-foreground: 207 100% 96%;
+    --sidebar-primary: 332 85% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 332 50% 20%;
+    --sidebar-accent-foreground: 332 85% 80%;
+    --sidebar-border: 203 40% 20%;
+    --sidebar-ring: 332 85% 60%;
   }
 }
 
@@ -110,6 +115,28 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Playfair Display', serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* Glassmorphism Mesh Animation Keyframes Base */
+  @keyframes blob {
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
+  }
+  .animate-blob {
+    animation: blob 7s infinite alternate;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
   }
 }
 
@@ -130,6 +157,15 @@
     background: var(--gradient-hero);
   }
 
+  /* Core Glassmorphism Logic */
+  .glass-card {
+    @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-card;
+  }
+  
+  .glass-panel {
+    @apply bg-white/50 dark:bg-slate-900/50 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-sm relative overflow-hidden;
+  }
+
   .animate-fade-in {
     animation: fadeIn 0.3s ease-out forwards;
   }
@@ -144,32 +180,16 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideRight {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
 }

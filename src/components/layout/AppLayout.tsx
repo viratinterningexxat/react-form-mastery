@@ -116,6 +116,53 @@ const Navigation = memo(function Navigation({
     );
   }
 
+  if (user?.role === 'clinical_site') {
+    return (
+      <nav className="space-y-1">
+        <NavItem
+          to="/clinical/home"
+          icon={<LayoutDashboard className="w-5 h-5" />}
+          label="Clinical Dashboard"
+          onClick={onItemClick}
+        />
+        <NavItem
+          to="/credentials"
+          icon={<FileCheck className="w-5 h-5" />}
+          label="Student Credentials"
+          onClick={onItemClick}
+        />
+        <NavItem
+          to="/students"
+          icon={<Users className="w-5 h-5" />}
+          label="Manage Students"
+          onClick={onItemClick}
+        />
+        <NavItem
+          to="/reports"
+          icon={<BarChart3 className="w-5 h-5" />}
+          label="Clinical Reports"
+          onClick={onItemClick}
+        />
+        <NavItem
+          to="/clinical/settings"
+          icon={<Settings className="w-5 h-5" />}
+          label="Settings"
+          onClick={onItemClick}
+        />
+        <div className="pt-4 border-t">
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50"
+            onClick={handleLogout}
+          >
+            <LogOut className="w-5 h-5" />
+            <span>Logout</span>
+          </Button>
+        </div>
+      </nav>
+    );
+  }
+
   // Student navigation
   return (
     <nav className="space-y-1">
@@ -179,9 +226,14 @@ export const AppLayout = memo(function AppLayout({ children, alertCount }: AppLa
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative overflow-hidden bg-background">
+      {/* Background Blobs for Glassmorphism */}
+      <div className="fixed top-0 -left-4 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-blob dark:bg-pink-900 dark:mix-blend-screen pointer-events-none" />
+      <div className="fixed top-0 -right-4 w-96 h-96 bg-sky-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-blob animation-delay-2000 dark:bg-sky-900 dark:mix-blend-screen pointer-events-none" />
+      <div className="fixed -bottom-8 left-20 w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-blob animation-delay-4000 dark:bg-teal-900 dark:mix-blend-screen pointer-events-none" />
+
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+      <header className="sticky top-0 z-50 glass-panel border-b-white/20">
         <div className="container max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Mobile Menu */}
@@ -203,12 +255,23 @@ export const AppLayout = memo(function AppLayout({ children, alertCount }: AppLa
             </Sheet>
 
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center shadow-md">
-                <Shield className="w-5 h-5 text-primary-foreground" />
+              <div className="flex items-center">
+                 <img 
+                   src="https://exxat.com/wp-content/uploads/2024/02/Exxat_logo.svg" 
+                   alt="Exxat Logo" 
+                   className="h-8 dark:brightness-200 dark:contrast-200" 
+                   onError={(e) => { 
+                     const target = e.currentTarget;
+                     target.onerror = null; // Prevent infinite loop
+                     // Create a visually identical text fallback just in case the link breaks
+                     target.outerHTML = '<span class="text-2xl font-bold tracking-tight text-[#E31C79] dark:text-pink-400 font-serif">exxat</span>';
+                   }} 
+                 />
               </div>
+              <div className="h-8 w-px bg-border/60 mx-2 hidden sm:block" />
               <div>
-                <h1 className="text-lg font-semibold">ClinCred</h1>
-                <p className="text-xs text-muted-foreground hidden sm:block">
+                <h1 className="text-lg font-semibold tracking-tight">ClinCred</h1>
+                <p className="text-[10px] uppercase tracking-wider font-bold text-primary hidden sm:block">
                   Clinical Credentialing
                 </p>
               </div>
