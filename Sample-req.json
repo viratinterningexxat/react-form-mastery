@@ -1,0 +1,791 @@
+{
+    "_id": "68e48fa80fea3de909fc8345",
+    "_updatedAt": "2025-10-09T13:04:16.549Z",
+    "active": true,
+    "allowSetupChanges": false,
+    "appName": "steps",
+    "bloodTest": {
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "Blood Test Section",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Result Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "testType": {
+            "controlType": "radio",
+            "enabled": true,
+            "label": "Test Type",
+            "options": [
+                "T-Spot",
+                "Gold/QuantiFERON"
+            ],
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "booster": {
+        "doses": null,
+        "enabled": false,
+        "expiryDate": null,
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": false,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "Revaccination/Booster Details",
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": false,
+            "label": "Upload Files",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": false,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "carryForwardConfig": {
+        "days": 0,
+        "disabled": true,
+        "type": "UntilExpiration"
+    },
+    "category": "Base Configuration",
+    "certification": {
+        "courseName": {
+            "controlType": "textBox",
+            "enabled": true,
+            "label": "Name of course",
+            "required": false
+        },
+        "courseType": {
+            "controlType": "dropDown",
+            "enabled": true,
+            "label": "Course Type",
+            "options": [
+                "Online",
+                "Classroom",
+                "Hybrid"
+            ],
+            "required": false
+        },
+        "documentType": {
+            "controlType": "dropDown",
+            "enabled": true,
+            "label": "Document Type",
+            "options": [
+                "Card",
+                "Certificate"
+            ],
+            "required": false
+        },
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Renewal Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "CPR Certification Details",
+        "provider": {
+            "controlType": "textBox",
+            "enabled": true,
+            "label": "Provider's name",
+            "required": false
+        },
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Issue date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload certificate",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "chestXray": {
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "Chest X Ray Section",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Result Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "createdBy": "jignesh.karamchandani1@exxat.com",
+    "custom": {
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "label": "User Defined Details",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Result Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "decline": {
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "day": 15,
+                "month": 10,
+                "year": 2025
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "Declination Details",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Date of Declination",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "docType": "base-config",
+    "dueDate": null,
+    "dueOffsetDays": 0,
+    "guidelines": {
+        "samples": {
+            "collectionId": "",
+            "files": null
+        },
+        "templates": {
+            "collectionId": "",
+            "files": null
+        }
+    },
+    "historyOfDisease": {
+        "enabled": false,
+        "faas": {
+            "formId": ""
+        },
+        "label": "History of Disease Details",
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": false,
+            "label": "Upload Files",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": false,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "hisummary": {
+        "applicableDocuments": {
+            "controlType": "checkBox",
+            "enabled": true,
+            "label": "Document types",
+            "options": [
+                "MMR",
+                "Tuberculosis",
+                "Varicella",
+                "Hepatitis A",
+                "Hepatitis B",
+                "Hepatitis C",
+                "TDAP",
+                "Flu (Influenza)",
+                "Polio",
+                "Meningococcal",
+                "Covid-19"
+            ],
+            "required": false
+        },
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiration Date",
+            "required": false
+        },
+        "label": "HI Summary Details",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Completion Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "licensure": {
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiration Date",
+            "required": false
+        },
+        "label": "Additional Licensure Details",
+        "licenseNumber": {
+            "controlType": "textBox",
+            "enabled": true,
+            "label": "License number",
+            "required": false
+        },
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Licensure Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload",
+            "required": false
+        },
+        "stateOfLicense": {
+            "controlType": "dropDown",
+            "enabled": true,
+            "label": "State of license",
+            "options": [
+                "AL",
+                "AK",
+                "AZ",
+                "AR",
+                "CA",
+                "CO",
+                "CT",
+                "DE",
+                "FL",
+                "GA",
+                "HI",
+                "ID",
+                "IL",
+                "IN",
+                "IA",
+                "KS",
+                "KY",
+                "LA",
+                "ME",
+                "MD",
+                "MA",
+                "MI",
+                "MN",
+                "MS",
+                "MO",
+                "MT",
+                "NE",
+                "NV",
+                "NH",
+                "NJ",
+                "NM",
+                "NY",
+                "NC",
+                "ND",
+                "OH",
+                "OK",
+                "OR",
+                "PA",
+                "RI",
+                "SC",
+                "SD",
+                "TN",
+                "TX",
+                "UT",
+                "VT",
+                "VA",
+                "WA",
+                "WV",
+                "WI",
+                "WY"
+            ],
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        },
+        "typeOfLicense": {
+            "controlType": "textBox",
+            "enabled": true,
+            "label": "Type of license",
+            "required": false
+        }
+    },
+    "name": "Detailed Base Configuration",
+    "otherTiter": {
+        "enabled": false,
+        "expiryDate": null,
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": false,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "Rubella- Titer Details",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": false,
+            "label": "Result Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": false,
+            "label": "Upload Files",
+            "required": false
+        },
+        "testType": {
+            "controlType": "radio",
+            "enabled": false,
+            "label": "Test Type",
+            "options": [
+                "Positive",
+                "Negative",
+                "Equivocal"
+            ],
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": false,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "repeatTiter": {
+        "doseType": {
+            "controlType": "checkBox",
+            "enabled": true,
+            "label": "Dose Type",
+            "options": [
+                "Measles",
+                "Mumps",
+                "Rubella"
+            ],
+            "required": false
+        },
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "Mumps- Titer Details",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Result Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "testType": {
+            "controlType": "radio",
+            "enabled": true,
+            "label": "Test Type",
+            "options": [
+                "Positive",
+                "Negative",
+                "Equivocal"
+            ],
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "reportingContext": null,
+    "required": true,
+    "schemaOf": "",
+    "shortName": "base",
+    "symptomScrn": {
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "TB Symptom Screening Section",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Upload Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "tags": {
+        "ouCode": "D009",
+        "userType": "Faculty"
+    },
+    "tenantId": "Exxat",
+    "titer": {
+        "enabled": true,
+        "expiryDate": {
+            "fixed-date": {
+                "by-user": true
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "Titer Details",
+        "resultDate": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Result Date",
+            "required": false
+        },
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "testType": {
+            "controlType": "radio",
+            "enabled": true,
+            "label": "Test Type",
+            "options": [
+                "Positive",
+                "Negative",
+                "Equivocal"
+            ],
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "updatedBy": "jignesh.karamchandani@exxat.com",
+    "vaccine": {
+        "doses": [
+            {
+                "date": {
+                    "controlType": "datePicker",
+                    "enabled": true,
+                    "label": "Dose 1 Date",
+                    "required": false
+                },
+                "induration": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Step 1 Induration",
+                    "required": false
+                },
+                "lotNumber": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Dose 1 Lot Number",
+                    "required": false
+                },
+                "manufacturer": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Dose 1 Manufacturer",
+                    "required": false
+                }
+            },
+            {
+                "date": {
+                    "controlType": "datePicker",
+                    "enabled": true,
+                    "label": "Dose 2 Date",
+                    "required": false
+                },
+                "induration": {
+                    "controlType": "textBox",
+                    "enabled": false,
+                    "label": "Step 2 Induration",
+                    "required": false
+                },
+                "lotNumber": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Dose 2 Lot Number",
+                    "required": false
+                },
+                "manufacturer": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Dose 2 Manufacturer",
+                    "required": false
+                }
+            },
+            {
+                "date": {
+                    "controlType": "datePicker",
+                    "enabled": false,
+                    "label": "Dose 3 Date",
+                    "required": false
+                },
+                "induration": {
+                    "controlType": "textBox",
+                    "enabled": false,
+                    "label": "Step 3 Induration",
+                    "required": false
+                },
+                "lotNumber": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Dose 3 Lot Number",
+                    "required": false
+                },
+                "manufacturer": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Dose 3 Manufacturer",
+                    "required": false
+                }
+            },
+            {
+                "date": {
+                    "controlType": "datePicker",
+                    "enabled": false,
+                    "label": "Dose 4 Date",
+                    "required": false
+                },
+                "induration": {
+                    "controlType": "textBox",
+                    "enabled": false,
+                    "label": "Step 4 Induration",
+                    "required": false
+                },
+                "lotNumber": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Dose 4 Lot Number",
+                    "required": false
+                },
+                "manufacturer": {
+                    "controlType": "textBox",
+                    "enabled": true,
+                    "label": "Dose 4 Manufacturer",
+                    "required": false
+                }
+            }
+        ],
+        "enabled": true,
+        "expiryDate": {
+            "period": {
+                "years": 10
+            }
+        },
+        "expiryLogic": {
+            "controlType": "datePicker",
+            "enabled": true,
+            "label": "Expiry Date",
+            "required": false
+        },
+        "faas": {
+            "formId": ""
+        },
+        "label": "Vaccination Details",
+        "src": {
+            "controlType": "fileUpload",
+            "enabled": true,
+            "label": "Upload Files",
+            "required": false
+        },
+        "text": {
+            "controlType": "textArea",
+            "enabled": true,
+            "label": "Notes",
+            "required": false
+        }
+    },
+    "version": 7,
+    "workflow": {
+        "auto": true,
+        "on": {
+            "PendingReview": [
+                null,
+                "Approved"
+            ]
+        }
+    }
+}

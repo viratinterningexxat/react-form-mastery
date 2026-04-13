@@ -1,0 +1,830 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset1 Segoe UI Symbol;}{\f2\fnil\fcharset1 Cambria Math;}{\f3\fnil\fcharset1 Segoe UI Symbol;}}
+{\*\generator Riched20 10.0.19041}{\*\mmathPr\mmathFont2\mwrapIndent1440 }\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 I'll explain every file in your project, what it does, and all its features. Let me start by getting a complete overview of all files:\par
+\par
+\par
+Let me get detailed information about each directory and file:\par
+Now let me get the components subdirectories:\par
+Based on my comprehensive analysis, here's exactly what each file does and all its features:\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **ROOT SOURCE FILES**\par
+\par
+### **1. `src/App.tsx` (5.7KB)**\par
+**Purpose:** Main application router and entry point\par
+\par
+**Features:**\par
+- **Role-based routing:** Student, Approver, Clinical Site, Admin\par
+- **Protected routes:** Authentication guards for each role\par
+- **Lazy loading:** ClinicalDashboard loaded on-demand\par
+- **Route definitions:**\par
+  - `/` \f2\u8594?\f0  Role-based redirect\par
+  - `/student/home` \f2\u8594?\f0  Student Dashboard\par
+  - `/dashboard` \f2\u8594?\f0  Approver Dashboard\par
+  - `/clinical/home` \f2\u8594?\f0  Clinical Dashboard (lazy loaded)\par
+  - `/credentials` \f2\u8594?\f0  Student credentials\par
+  - `/profile` \f2\u8594?\f0  User profile\par
+  - `/alerts` \f2\u8594?\f0  Notifications\par
+  - `/checklist` \f2\u8594?\f0  Readiness checklist\par
+  - `/students` \f2\u8594?\f0  Student management (approver)\par
+  - `/reports` \f2\u8594?\f0  Analytics (approver)\par
+  - `/settings` \f2\u8594?\f0  Settings (approver)\par
+  - `/clinical/settings` \f2\u8594?\f0  Clinical settings\par
+  - `/admin` \f2\u8594?\f0  Admin dashboard\par
+\par
+---\par
+\par
+### **2. `src/main.tsx` (0.2KB)**\par
+**Purpose:** Application bootstrap\par
+\par
+**Features:**\par
+- React root rendering\par
+- Strict mode enabled\par
+- App component mounting\par
+\par
+---\par
+\par
+### **3. `src/App.css` (0.6KB)**\par
+**Purpose:** Global application styles\par
+\par
+**Features:**\par
+- Custom gradient utilities\par
+- Animation keyframes\par
+- Theme-specific styles\par
+\par
+---\par
+\par
+### **4. `src/index.css` (3.8KB)**\par
+**Purpose:** Tailwind CSS configuration and global styles\par
+\par
+**Features:**\par
+- Tailwind directives\par
+- CSS variables for theming\par
+- Custom utility classes\par
+- Dark mode support\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **COMPONENTS DIRECTORY (`src/components/`)**\par
+\par
+### **A. CREDENTIALS COMPONENTS (`src/components/credentials/`)**\par
+\par
+#### **1. `AdminPortal.tsx` (10.9KB)**\par
+**Purpose:** Main admin configuration interface\par
+\par
+**Features:**\par
+- Tab-based navigation (Vaccine, Booster, Document Types, Preview)\par
+- Dynamic section configuration\par
+- Real-time configuration preview\par
+- Save/load configuration\par
+- Document type management\par
+- Context override settings\par
+\par
+#### **2. `AlertsPanel.tsx` (5.1KB)**\par
+**Purpose:** Display credential alerts and notifications\par
+\par
+**Features:**\par
+- Alert categorization\par
+- Priority indicators\par
+- Dismissible alerts\par
+- Alert filtering\par
+\par
+#### **3. `CategoryAccordion.tsx` (5.1KB)**\par
+**Purpose:** Expandable category sections for credentials\par
+\par
+**Features:**\par
+- Accordion-style expansion\par
+- Category progress tracking\par
+- Document count display\par
+- Status indicators\par
+\par
+#### **4. `CategorySection.tsx` (3.0KB)**\par
+**Purpose:** Individual category display component\par
+\par
+**Features:**\par
+- Category header with icon\par
+- Progress visualization\par
+- Document list preview\par
+\par
+#### **5. `CredentialAccordionItem.tsx` (14.6KB)**\par
+**Purpose:** Individual credential item with full details\par
+\par
+**Features:**\par
+- Expandable credential details\par
+- Document upload interface\par
+- OCR auto-fill integration\par
+- Status tracking\par
+- Expiry date display\par
+- Action buttons (edit, delete, share)\par
+\par
+#### **6. `CredentialCard.tsx` (9.1KB)**\par
+**Purpose:** Compact credential display card\par
+\par
+**Features:**\par
+- Credential summary\par
+- Status badge\par
+- Quick actions\par
+- Expiry warning\par
+- File upload indicator\par
+\par
+#### **7. `DocumentTypeSelector.tsx` (12.4KB)**\par
+**Purpose:** Document type configuration and selection\par
+\par
+**Features:**\par
+- Predefined document types (TB, HepB, Flu, Covid, MMR, etc.)\par
+- Custom type creation\par
+- Type-specific rule management\par
+- Visibility rule preview\par
+- Configuration editor\par
+\par
+#### **8. `DynamicFormSection.tsx` (21.9KB)**\par
+**Purpose:** Dynamic form rendering based on configuration\par
+\par
+**Features:**\par
+- File upload with OCR\par
+- Dose management\par
+- Field validation\par
+- Auto-calculation of expiry dates\par
+- OCR progress tracking\par
+- Extracted data display\par
+- Multiple field types (date, text, select, radio, checkbox)\par
+\par
+#### **9. `EnhancedBoosterConfig.tsx` (12.2KB)**\par
+**Purpose:** Booster dose configuration panel\par
+\par
+**Features:**\par
+- Enable/disable booster toggle\par
+- Dose count configuration\par
+- Custom field management\par
+- Expiry logic configuration\par
+- Field type selection\par
+- Options management for dropdowns/radio\par
+\par
+#### **10. `EnhancedVaccineConfig.tsx` (11.8KB)**\par
+**Purpose:** Vaccine dose configuration panel\par
+\par
+**Features:**\par
+- Dose range configuration (1-10 doses)\par
+- Field configuration per dose\par
+- Field type management\par
+- Visibility rules\par
+- Required field toggles\par
+- Label customization\par
+- Conditional field display\par
+\par
+#### **11. `EnhancedVaccineForm.tsx` (11.4KB)**\par
+**Purpose:** Dynamic vaccine form renderer\par
+\par
+**Features:**\par
+- Dynamic field rendering\par
+- Conditional field visibility\par
+- Dose management (add/remove)\par
+- Expiry status calculation\par
+- Field validation\par
+- Document type awareness\par
+- Real-time updates\par
+\par
+#### **12. `ReadinessCard.tsx` (4.8KB)**\par
+**Purpose:** Clinical readiness status display\par
+\par
+**Features:**\par
+- Readiness percentage\par
+- Missing requirements list\par
+- Quick action buttons\par
+- Progress visualization\par
+\par
+#### **13. `VaccineDoseForm.tsx` (8.0KB)**\par
+**Purpose:** Individual vaccine dose entry form\par
+\par
+**Features:**\par
+- Manufacturer selection\par
+- Lot number input\par
+- Administration date\par
+- Auto-calculated expiration\par
+- Dose removal\par
+- Expiry status indicators\par
+\par
+---\par
+\par
+### **B. UI COMPONENTS (`src/components/ui/`) - 50 files**\par
+\par
+**Purpose:** Reusable UI component library (shadcn/ui based)\par
+\par
+**Key Components:**\par
+- **Form elements:** Button, Input, Textarea, Select, Checkbox, Radio\par
+- **Layout:** Card, Dialog, Sheet, Tabs, Accordion\par
+- **Feedback:** Alert, Toast, Progress, Badge\par
+- **Navigation:** Breadcrumb, Navigation Menu, Sidebar\par
+- **Data Display:** Table, Calendar, Chart, Avatar\par
+- **Overlays:** Dialog, Drawer, Popover, Tooltip\par
+- **Advanced:** Command palette, Carousel, Resizable panels\par
+\par
+---\par
+\par
+### **C. LAYOUT COMPONENTS (`src/components/layout/`)**\par
+\par
+#### **1. `AppLayout.tsx` (Full file)**\par
+**Purpose:** Main application layout with navigation\par
+\par
+**Features:**\par
+- Responsive sidebar navigation\par
+- Role-based menu items\par
+- Mobile hamburger menu\par
+- Header with user info\par
+- Theme toggle\par
+- Logout functionality\par
+- Alert notifications\par
+- **Role-specific navigation:**\par
+  - Student: Dashboard, Credentials, Checklist, Profile, Alerts\par
+  - Approver: Review Portal, Students, Reports, Settings\par
+  - Clinical: Clinical Dashboard, Credentials, Students, Reports, Settings\par
+\par
+---\par
+\par
+### **D. OTHER COMPONENTS**\par
+\par
+#### **1. `EmployeeRow.tsx` (2.7KB)**\par
+**Purpose:** Employee table row display\par
+\par
+**Features:**\par
+- Employee information display\par
+- Status indicators\par
+- Action buttons\par
+\par
+#### **2. `EmployeeTable.tsx` (5.0KB)**\par
+**Purpose:** Employee data table\par
+\par
+**Features:**\par
+- Sortable columns\par
+- Filterable data\par
+- Pagination\par
+- Bulk actions\par
+\par
+#### **3. `ErrorBoundary.tsx` (2.8KB)**\par
+**Purpose:** React error boundary\par
+\par
+**Features:**\par
+- Error catching\par
+- Fallback UI\par
+- Error reporting\par
+- Recovery options\par
+\par
+#### **4. `NavLink.tsx` (0.8KB)**\par
+**Purpose:** Navigation link component\par
+\par
+**Features:**\par
+- Active state styling\par
+- Router integration\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **HOOKS DIRECTORY (`src/hooks/`) - 14 files**\par
+\par
+### **1. `use-mobile.tsx` (0.6KB)**\par
+**Purpose:** Mobile device detection\par
+\par
+**Features:**\par
+- Screen size detection\par
+- Mobile breakpoint checking\par
+\par
+### **2. `use-toast.ts` (4.0KB)**\par
+**Purpose:** Toast notification management\par
+\par
+**Features:**\par
+- Toast creation\par
+- Toast dismissal\par
+- Toast positioning\par
+- Multiple toast handling\par
+\par
+### **3. `useAsync.ts` (6.6KB)**\par
+**Purpose:** Async operation handling\par
+\par
+**Features:**\par
+- Loading states\par
+- Error handling\par
+- Request cancellation\par
+- Retry logic\par
+\par
+### **4. `useBatchDocumentProcessor.ts` (2.7KB)**\par
+**Purpose:** Batch document processing\par
+\par
+**Features:**\par
+- Multiple file processing\par
+- Progress tracking\par
+- Error aggregation\par
+\par
+### **5. `useCredentials.ts` (8.6KB)**\par
+**Purpose:** Credential data management\par
+\par
+**Features:**\par
+- Credential CRUD operations\par
+- Status tracking\par
+- Expiry monitoring\par
+- Document management\par
+\par
+### **6. `useCredentialsAPI.ts` (10.1KB)**\par
+**Purpose:** API integration for credentials\par
+\par
+**Features:**\par
+- Student API calls\par
+- Approver API calls\par
+- Admin API calls\par
+- Dashboard API calls\par
+- Error handling\par
+- Loading states\par
+\par
+### **7. `useDebounce.ts` (0.4KB)**\par
+**Purpose:** Input debouncing\par
+\par
+**Features:**\par
+- Delayed execution\par
+- Search optimization\par
+\par
+### **8. `useDocumentProcessor.ts` (1.6KB)**\par
+**Purpose:** Single document processing\par
+\par
+**Features:**\par
+- File upload\par
+- OCR processing\par
+- Data extraction\par
+\par
+### **9. `useFetch.ts` (6.7KB)**\par
+**Purpose:** Generic data fetching\par
+\par
+**Features:**\par
+- HTTP requests\par
+- Caching\par
+- Error handling\par
+- Retry logic\par
+\par
+### **10. `useForm.ts` (1.2KB)**\par
+**Purpose:** Form state management\par
+\par
+**Features:**\par
+- Form validation\par
+- Field tracking\par
+- Submit handling\par
+\par
+### **11. `useHealthcareAPIs.ts` (10.4KB)**\par
+**Purpose:** Free healthcare API integration\par
+\par
+**Features:**\par
+- NPI verification\par
+- Drug validation (RxNorm)\par
+- Lab test lookup (LOINC)\par
+- Vaccine schedule (CDC)\par
+- Health card verification\par
+- FHIR integration\par
+\par
+### **12. `useLocalStorage.ts` (0.9KB)**\par
+**Purpose:** Local storage management\par
+\par
+**Features:**\par
+- Data persistence\par
+- JSON serialization\par
+- Error handling\par
+\par
+### **13. `useShareableLink.ts` (1.7KB)**\par
+**Purpose:** Shareable link generation\par
+\par
+**Features:**\par
+- Link creation\par
+- Expiry management\par
+- Access control\par
+\par
+### **14. `useStudentProfile.ts` (4.8KB)**\par
+**Purpose:** Student profile management\par
+\par
+**Features:**\par
+- Profile data\par
+- Update operations\par
+- Validation\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **PAGES DIRECTORY (`src/pages/`) - 20 files**\par
+\par
+### **1. `Login.tsx` (4.9KB)**\par
+**Purpose:** User authentication\par
+\par
+**Features:**\par
+- Email/password login\par
+- Role-based redirect\par
+- Demo account hints\par
+- Error handling\par
+\par
+### **2. `Register.tsx` (8.7KB)**\par
+**Purpose:** User registration\par
+\par
+**Features:**\par
+- Multi-role registration\par
+- Organization fields\par
+- Validation\par
+- Terms acceptance\par
+\par
+### **3. `Dashboard.tsx` (16.7KB)**\par
+**Purpose:** Student dashboard\par
+\par
+**Features:**\par
+- Clinical readiness score\par
+- Document status overview\par
+- Expiry alerts\par
+- Quick actions\par
+- Profile editing\par
+- Shareable link generation\par
+\par
+### **4. `ClinicalDashboard.tsx` (7.5KB)**\par
+**Purpose:** Clinical site dashboard\par
+\par
+**Features:**\par
+- Clinical statistics\par
+- Student management overview\par
+- Pending reviews\par
+- Recent activities\par
+- Upcoming deadlines\par
+- Quick action buttons\par
+\par
+### **5. `ApproverDashboard.tsx` (14.0KB)**\par
+**Purpose:** Approver review portal\par
+\par
+**Features:**\par
+- Pending approvals list\par
+- Student search\par
+- Bulk approval\par
+- Review history\par
+- Statistics\par
+\par
+### **6. `Credentials.tsx` (10.3KB)**\par
+**Purpose:** Credential management\par
+\par
+**Features:**\par
+- Credential list\par
+- Upload interface\par
+- Status tracking\par
+- Category filtering\par
+\par
+### **7. `Students.tsx` (10.4KB)**\par
+**Purpose:** Student management\par
+\par
+**Features:**\par
+- Student list\par
+- Search/filter\par
+- Bulk operations\par
+- Export functionality\par
+\par
+### **8. `Reports.tsx` (11.9KB)**\par
+**Purpose:** Analytics and reporting\par
+\par
+**Features:**\par
+- Compliance reports\par
+- Expiry reports\par
+- Export options\par
+- Data visualization\par
+\par
+### **9. `Settings.tsx` (15.9KB)**\par
+**Purpose:** User settings\par
+\par
+**Features:**\par
+- Profile settings\par
+- Notification preferences\par
+- Security settings\par
+- Theme selection\par
+\par
+### **10. `Alerts.tsx` (8.4KB)**\par
+**Purpose:** Alert management\par
+\par
+**Features:**\par
+- Alert list\par
+- Filtering\par
+- Dismissal\par
+- Priority levels\par
+\par
+### **11. `Checklist.tsx` (8.0KB)**\par
+**Purpose:** Readiness checklist\par
+\par
+**Features:**\par
+- Requirement checklist\par
+- Progress tracking\par
+- Missing items highlight\par
+- Completion status\par
+\par
+### **12. `Profile.tsx` (2.8KB)**\par
+**Purpose:** User profile display\par
+\par
+**Features:**\par
+- Profile information\par
+- Document preview\par
+- Edit capabilities\par
+\par
+### **13. `SharedProfile.tsx` (8.7KB)**\par
+**Purpose:** Public profile sharing\par
+\par
+**Features:**\par
+- Read-only profile view\par
+- Shareable link access\par
+- Credential verification\par
+- Contact information\par
+\par
+### **14. `Verify.tsx` (7.9KB)**\par
+**Purpose:** Document verification\par
+\par
+**Features:**\par
+- QR code scanning\par
+- Document validation\par
+- Verification status\par
+\par
+### **15. `AdminConfigPreview.tsx` (22.4KB)**\par
+**Purpose:** Admin configuration preview\par
+\par
+**Features:**\par
+- Configuration visualization\par
+- Real-time preview\par
+- Section management\par
+\par
+### **16. `BlueprintDemo.tsx` (20.0KB)**\par
+**Purpose:** Blueprint architecture demo\par
+\par
+**Features:**\par
+- Architecture visualization\par
+- Component showcase\par
+- Interactive examples\par
+\par
+### **17. `EnhancedDemo.tsx` (10.3KB)**\par
+**Purpose:** Enhanced features demo\par
+\par
+**Features:**\par
+- Feature highlights\par
+- Interactive demonstrations\par
+\par
+### **18. `HealthcareAPIDemo.tsx` (13.7KB)**\par
+**Purpose:** Healthcare API integration demo\par
+\par
+**Features:**\par
+- NPI verification demo\par
+- Drug lookup demo\par
+- Lab test search\par
+- Health card verification\par
+- Vaccine schedule display\par
+\par
+### **19. `Index.tsx` (3.2KB)**\par
+**Purpose:** Landing page\par
+\par
+**Features:**\par
+- Application overview\par
+- Feature highlights\par
+- Call-to-action buttons\par
+\par
+### **20. `NotFound.tsx` (0.7KB)**\par
+**Purpose:** 404 error page\par
+\par
+**Features:**\par
+- Error message\par
+- Navigation links\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **SERVICES DIRECTORY (`src/services/`) - 3 files**\par
+\par
+### **1. `api.ts` (8.4KB)**\par
+**Purpose:** Legacy API service\par
+\par
+**Features:**\par
+- HTTP requests\par
+- Authentication\par
+- Error handling\par
+\par
+### **2. `apiClient.ts` (9.0KB)**\par
+**Purpose:** Modern API client\par
+\par
+**Features:**\par
+- Token management\par
+- Request/response interceptors\par
+- Error retry logic\par
+- Type-safe requests\par
+- **6 API domains:**\par
+  - Auth API\par
+  - Credential API\par
+  - Approval API\par
+  - Config API\par
+  - Engine API\par
+  - Dashboard API\par
+\par
+### **3. `freeHealthcareAPIs.ts` (11.6KB)**\par
+**Purpose:** Free healthcare API integrations\par
+\par
+**Features:**\par
+- **NPI Registry API:** Provider verification\par
+- **RxNorm API:** Drug/vaccine validation\par
+- **LOINC API:** Lab test codes\par
+- **CDC API:** Vaccine schedules\par
+- **SMART Health Cards:** QR verification\par
+- **HAPI FHIR:** Clinical data standard\par
+- **OCR Services:** Document text extraction\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **TYPES DIRECTORY (`src/types/`) - 7 files**\par
+\par
+### **1. `enhancedConfig.ts` (6.4KB)**\par
+**Purpose:** Blueprint configuration types\par
+\par
+**Features:**\par
+- SectionConfig interface\par
+- FieldConfig interface\par
+- RepeatConfig interface\par
+- VisibilityRule interface\par
+- ExpiryRule interface\par
+- ValidationRules interface\par
+- SectionSubmission interface\par
+- RuleEngine interface\par
+\par
+### **2. `credential.ts` (7.5KB)**\par
+**Purpose:** Credential data types\par
+\par
+**Features:**\par
+- Credential interfaces\par
+- Status enums\par
+- Document types\par
+\par
+### **3. `credentialDetails.ts` (1.8KB)**\par
+**Purpose:** Detailed credential types\par
+\par
+**Features:**\par
+- VaccineDose interface\par
+- CredentialDetails interface\par
+- Manufacturer lists\par
+- Helper functions\par
+\par
+### **4. `formConfig.ts` (3.3KB)**\par
+**Purpose:** Form configuration types\par
+\par
+**Features:**\par
+- Section configuration\par
+- Field configuration\par
+- Validation rules\par
+\par
+### **5. `RequirementConfig.ts` (7.3KB)**\par
+**Purpose:** Requirement configuration types\par
+\par
+**Features:**\par
+- Requirement interfaces\par
+- Category types\par
+- Validation schemas\par
+\par
+### **6. `common.ts` (6.2KB)**\par
+**Purpose:** Common utility types\par
+\par
+**Features:**\par
+- Shared interfaces\par
+- Utility types\par
+- Enums\par
+\par
+### **7. `employee.ts` (1.5KB)**\par
+**Purpose:** Employee data types\par
+\par
+**Features:**\par
+- Employee interfaces\par
+- Department types\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **UTILS DIRECTORY (`src/utils/`) - 7 files**\par
+\par
+### **1. `configMigration.ts` (8.0KB)**\par
+**Purpose:** Legacy to new config migration\par
+\par
+**Features:**\par
+- Migration functions\par
+- Default configurations\par
+- Field templates\par
+\par
+### **2. `getRequirementConfig.ts` (3.3KB)**\par
+**Purpose:** Requirement configuration loader\par
+\par
+**Features:**\par
+- Config loading\par
+- Validation\par
+- Default values\par
+\par
+### **3. `logger.ts` (6.9KB)**\par
+**Purpose:** Application logging\par
+\par
+**Features:**\par
+- Log levels\par
+- Console output\par
+- Error tracking\par
+\par
+### **4. `ocrExtractor.ts` (5.2KB)**\par
+**Purpose:** OCR text extraction\par
+\par
+**Features:**\par
+- Image processing\par
+- Text parsing\par
+- Data normalization\par
+- Manufacturer matching\par
+\par
+### **5. `ocrMapper.ts` (1.2KB)**\par
+**Purpose:** OCR data mapping\par
+\par
+**Features:**\par
+- Field mapping\par
+- Data transformation\par
+\par
+### **6. `validationEngine.ts` (2.2KB)**\par
+**Purpose:** Form validation\par
+\par
+**Features:**\par
+- Validation rules\par
+- Error messages\par
+- Field validation\par
+\par
+### **7. `validators.ts` (1.1KB)**\par
+**Purpose:** Input validators\par
+\par
+**Features:**\par
+- Email validation\par
+- Phone validation\par
+- Custom validators\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **CONTEXTS DIRECTORY (`src/contexts/`) - 1 file**\par
+\par
+### **1. `AuthContext.tsx` (3.6KB)**\par
+**Purpose:** Authentication state management\par
+\par
+**Features:**\par
+- User authentication\par
+- Role management\par
+- Login/logout\par
+- Mock authentication\par
+- **4 roles:** student, approver, clinical_site, admin\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9023?\f0  **DATA DIRECTORY (`src/data/`) - 1 file**\par
+\par
+### **1. `requirement-config.json` (21.5KB)**\par
+**Purpose:** Default requirement configuration\par
+\par
+**Features:**\par
+- Vaccine requirements\par
+- Titer requirements\par
+- Blood test config\par
+- Chest X-ray config\par
+- Declination settings\par
+- Licensure config\par
+\par
+---\par
+\par
+## \f1\u-10180?\u-8273?\f0  **SUMMARY OF ALL FEATURES**\par
+\par
+### **Authentication & Authorization**\par
+- \f3\u9989?\f0  Multi-role support (Student, Approver, Clinical, Admin)\par
+- \f3\u9989?\f0  Protected routes\par
+- \f3\u9989?\f0  Role-based navigation\par
+- \f3\u9989?\f0  Mock authentication for testing\par
+\par
+### **Credential Management**\par
+- \f3\u9989?\f0  Dynamic form generation\par
+- \f3\u9989?\f0  Document upload with OCR\par
+- \f3\u9989?\f0  Dose management (1-10 doses)\par
+- \f3\u9989?\f0  Expiry calculation\par
+- \f3\u9989?\f0  Status tracking\par
+- \f3\u9989?\f0  Bulk operations\par
+\par
+### **Admin Configuration**\par
+- \f3\u9989?\f0  Visual configuration portal\par
+- \f3\u9989?\f0  Dynamic sections\par
+- \f3\u9989?\f0  Field management\par
+- \f3\u9989?\f0  Visibility rules\par
+- \f3\u9989?\f0  Expiry logic\par
+- \f3\u9989?\f0  Context overrides\par
+\par
+### **Healthcare APIs**\par
+- \f3\u9989?\f0  NPI provider verification\par
+- \f3\u9989?\f0  Drug/vaccine validation\par
+- \f3\u9989?\f0  Lab test codes\par
+- \f3\u9989?\f0  Vaccine schedules\par
+- \f3\u9989?\f0  Health card verification\par
+- \f3\u9989?\f0  FHIR integration\par
+\par
+### **Dashboard & Analytics**\par
+- \f3\u9989?\f0  Role-specific dashboards\par
+- \f3\u9989?\f0  Compliance tracking\par
+- \f3\u9989?\f0  Expiry alerts\par
+- \f3\u9989?\f0  Reports and analytics\par
+- \f3\u9989?\f0  Student management\par
+\par
+### **UI/UX**\par
+- \f3\u9989?\f0  Responsive design\par
+- \f3\u9989?\f0  Dark mode support\par
+- \f3\u9989?\f0  Toast notifications\par
+- \f3\u9989?\f0  Loading states\par
+- \f3\u9989?\f0  Error boundaries\par
+- \f3\u9989?\f0  Mobile-friendly\par
+\par
+**Total Files: 100+ components, hooks, services, and utilities working together to create a comprehensive clinical credential management system.**\lang9\par
+}
+ 
