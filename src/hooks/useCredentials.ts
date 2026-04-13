@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useLocalStorage } from './useLocalStorage';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   CredentialDocument,
   CredentialRequirement,
@@ -8,7 +9,7 @@ import {
   DocumentStatus,
   DEFAULT_REQUIREMENTS,
 } from '@/types/credential';
-import { differenceInDays, parseISO, addDays, format } from 'date-fns';
+import { differenceInDays, parseISO, addDays, format, subDays } from 'date-fns';
 
 const STORAGE_KEYS = {
   documents: 'credential_documents',
@@ -29,6 +30,108 @@ export function useCredentials() {
     STORAGE_KEYS.requirements,
     DEFAULT_REQUIREMENTS
   );
+  const { user } = useAuth();
+
+  const getRequirementExpiry = (requirement: CredentialRequirement | undefined, uploadedAt: string) => {
+    if (!requirement || requirement.validityPeriodDays === null) return null;
+    return addDays(new Date(uploadedAt), requirement.validityPeriodDays).toISOString();
+  };
+
+  const createMockDocument = (params: {
+    requirementId: string;
+    status: DocumentStatus;
+    uploadedAt: string;
+    expiresAt: string | null;
+    studentId?: string;
+    studentName?: string;
+    reviewNotes?: string;
+    reviewedAt?: string;
+    reviewedBy?: string;
+  }): CredentialDocument => ({
+    id: `${params.requirementId}_${Math.random().toString(36).substr(2, 8)}`,
+    requirementId: params.requirementId,
+    fileName: `${params.requirementId}_document.pdf`,
+    fileType: 'application/pdf',
+    fileSize: 1024,
+    fileDataUrl: '',
+    uploadedAt: params.uploadedAt,
+    status: params.status,
+    expiresAt: params.expiresAt,
+    reviewNotes: params.reviewNotes,
+    reviewedAt: params.reviewedAt,
+    reviewedBy: params.reviewedBy,
+    studentId: params.studentId,
+    studentName: params.studentName,
+  });
+
+  const generateMockDocuments = (role: 'student' | 'approver' | 'clinical_site') => {
+    const now = new Date();
+    const formatUploaded = (daysAgo: number) => subDays(now, daysAgo).toISOString();
+
+    const statuses: DocumentStatus[] = ['pending_review', 'approved', 'approved_with_exception', 'rejected'];
+    const studentNames = [
+      'John Student', 'Jane Doe', 'Alice Smith', 'Bob Johnson', 'Charlie Brown', 'Diana Prince', 'Eve Wilson', 'Frank Miller',
+      'Grace Lee', 'Henry Ford', 'Ivy Chen', 'Jack Ryan', 'Kate Bush', 'Liam Neeson', 'Mia Khalifa', 'Noah Centineo',
+      'Olivia Rodrigo', 'Peter Parker', 'Quinn Fabray', 'Rachel Green', 'Sam Wilson', 'Tina Fey', 'Uma Thurman',
+      'Victor Hugo', 'Wanda Maximoff', 'Xavier Charles', 'Yara Shahidi', 'Zoe Saldana', 'Aaron Judge', 'Bella Thorne',
+      'Cody Simpson', 'Dakota Fanning', 'Ethan Hawke', 'Fiona Apple', 'Gavin Newsom', 'Holly Hunter', 'Ian McShane',
+      'Julia Roberts', 'Kevin Hart', 'Lana Del Rey', 'Mason Mount', 'Nina Dobrev', 'Owen Wilson', 'Piper Perabo',
+      'Quincy Jones', 'Riley Reid', 'Seth Rogen', 'Tilda Swinton', 'Uri Geller', 'Vanessa Hudgens', 'Will Smith',
+      'Xena Warrior', 'Yusuf Islam', 'Zara Larsson', 'Adam Levine', 'Betty White', 'Chris Evans', 'Drew Barrymore',
+      'Elton John', 'Florence Welch', 'George Clooney', 'Halle Berry', 'Idris Elba', 'Jennifer Lopez', 'Kanye West',
+      'Lady Gaga', 'Michael Jordan', 'Natalie Portman', 'Oprah Winfrey', 'Prince Harry', 'Queen Latifah', 'Ryan Reynolds',
+      'Scarlett Johansson', 'Tom Hanks', 'Ursula K. Le Guin', 'Vin Diesel', 'Willem Dafoe', 'Xzibit', 'Yoda', 'Zac Efron',
+      'Ava Gardner', 'Bruce Willis', 'Cameron Diaz', 'Daniel Radcliffe', 'Emma Watson', 'Forest Whitaker', 'Gal Gadot',
+      'Harrison Ford', 'Ingrid Bergman', 'James Dean', 'Kirsten Dunst', 'Leonardo DiCaprio', 'Meryl Streep', 'Nicolas Cage',
+      'Orlando Bloom', 'Penelope Cruz', 'Quentin Tarantino', 'Robert Downey Jr.', 'Sandra Bullock', 'Tim Burton',
+      'Uma Thurman', 'Viggo Mortensen', 'Winona Ryder', 'Xavier Dolan', 'Yann Martel', 'Zoe Kravitz'
+    ];
+
+    const generateBatch = (count: number, studentPrefix: string, statusDistribution: Record<DocumentStatus, number>) => {
+      const docs: CredentialDocument[] = [];
+      let idCounter = 0;
+
+      for (let i = 0; i < count; i++) {
+        const requirementId = requirements[Math.floor(Math.random() * requirements.length)].id;
+        const status = statuses[Math.floor(Math.random() * statuses.length)];
+        const daysAgo = Math.floor(Math.random() * 365) + 1; // 1 to 365 days ago
+        const studentIndex = Math.floor(Math.random() * studentNames.length);
+        const studentId = `${studentPrefix}_${studentIndex}`;
+        const studentName = studentNames[studentIndex];
+
+        const doc = createMockDocument({
+          requirementId,
+          status,
+          uploadedAt: formatUploaded(daysAgo),
+          expiresAt: getRequirementExpiry(requirements.find((r) => r.id === requirementId), formatUploaded(daysAgo)),
+          studentId,
+          studentName,
+          reviewNotes: status === 'rejected' ? 'Random rejection note' : status === 'approved_with_exception' ? 'Approved with minor exception' : undefined,
+          reviewedAt: status !== 'pending_review' ? formatUploaded(Math.floor(Math.random() * daysAgo)) : undefined,
+          reviewedBy: status !== 'pending_review' ? 'Mock Reviewer' : undefined,
+        });
+        docs.push(doc);
+      }
+      return docs;
+    };
+
+    if (role === 'approver') {
+      return generateBatch(10000, 'approver_student', { pending_review: 60, approved: 25, approved_with_exception: 10, rejected: 5 });
+    }
+
+    if (role === 'clinical_site') {
+      return generateBatch(10000, 'clinical_student', { pending_review: 20, approved: 60, approved_with_exception: 15, rejected: 5 });
+    }
+
+    // Default student mock data - 10000 documents for the student
+    return generateBatch(10000, 'student', { pending_review: 10, approved: 70, approved_with_exception: 15, rejected: 5 });
+  };
+
+  useEffect(() => {
+    if (!user || documents.length > 0 || requirements.length === 0) return;
+    const mockDocs = generateMockDocuments(user.role);
+    setDocuments(mockDocs);
+  }, [user, documents.length, requirements.length, requirements, setDocuments]);
 
   // Calculate expiration alerts
   const calculateAlerts = useCallback(() => {

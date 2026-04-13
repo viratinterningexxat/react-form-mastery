@@ -88,52 +88,50 @@ export default function AdminConfigPreview() {
 
   const updateSectionEnabled = (sectionName: string, enabled: boolean) => {
     if (!config) return;
-    setConfig(prev => prev ? {
-      ...prev,
-      [sectionName]: {
-        ...prev[sectionName as keyof BaseConfig],
-        enabled
-      }
-    } : null);
+    const sections = config.sections.map(s =>
+      s.id === sectionName ? { ...s, enabled } : s
+    );
+    setConfig({ ...config, sections });
     setHasChanges(true);
   };
 
   const updateSectionLabel = (sectionName: string, label: string) => {
     if (!config) return;
-    setConfig(prev => prev ? {
-      ...prev,
-      [sectionName]: {
-        ...prev[sectionName as keyof BaseConfig],
-        label
-      }
-    } : null);
+    const sections = config.sections.map(s =>
+      s.id === sectionName ? { ...s, label } : s
+    );
+    setConfig({ ...config, sections });
     setHasChanges(true);
   };
 
-  const updateFieldConfig = (sectionName: string, fieldName: string, updates: Partial<BaseFieldConfig>) => {
+  const updateFieldConfig = (
+    sectionName: string,
+    fieldName: string,
+    updates: Partial<FieldConfig>
+  ) => {
     if (!config) return;
-    const section = config[sectionName as keyof BaseConfig] as Record<string, unknown>;
-    if (!section || !section[fieldName]) return;
-
-    setConfig(prev => prev ? {
-      ...prev,
-      [sectionName]: {
-        ...prev[sectionName as keyof BaseConfig],
-        [fieldName]: {
-          ...section[fieldName],
-          ...updates
-        }
-      }
-    } : null);
+    const sections = config.sections.map(s => {
+      if (s.id !== sectionName) return s;
+      const fields = s.fields.map(f =>
+        f.key === fieldName ? { ...f, ...updates } : f
+      );
+      return { ...s, fields };
+    });
+    setConfig({ ...config, sections });
     setHasChanges(true);
   };
 
-  const updateDoseConfig = (sectionName: string, doseIndex: number, fieldName: string, updates: Partial<BaseFieldConfig>) => {
+  const updateSection = (sectionId: string, updates: Partial<SectionConfig>) => {
     if (!config) return;
-    const section = config[sectionName as keyof BaseConfig] as Record<string, unknown>;
-    if (!section || !section.doses || !Array.isArray(section.doses) || !section.doses[doseIndex] || !(section.doses[doseIndex] as Record<string, unknown>)[fieldName]) return;
+    const sections = config.sections.map(s =>
+      s.id === sectionId ? { ...s, ...updates } : s
+    );
+    setConfig({ ...config, sections });
+    setHasChanges(true);
+  };
 
-    setConfig(prev => {
+  // repeatable helpers
+  const updateRepeatField = (
       if (!prev) return null;
       const newConfig = { ...prev };
       const sectionCopy = { ...newConfig[sectionName as keyof BaseConfig] } as Record<string, unknown>;
@@ -276,104 +274,30 @@ export default function AdminConfigPreview() {
       </Card>
 
       {/* Section Configuration */}
-      <Tabs defaultValue="vaccine" className="w-full">
+      <Tabs defaultValue={config.sections[0]?.id || ''} className="w-full">
         <TabsList className="grid w-full grid-cols-7">
-          <TabsTrigger value="vaccine">Vaccine</TabsTrigger>
-          <TabsTrigger value="titer">Titer</TabsTrigger>
-          <TabsTrigger value="certification">Cert</TabsTrigger>
-          <TabsTrigger value="licensure">License</TabsTrigger>
-          <TabsTrigger value="screening">Screening</TabsTrigger>
-          <TabsTrigger value="other">Other</TabsTrigger>
+          {config.sections.map((s) => (
+            <TabsTrigger key={s.id} value={s.id}>
+              {s.label}
+            </TabsTrigger>
+          ))}
           <TabsTrigger value="advanced">Advanced</TabsTrigger>
         </TabsList>
 
-        {/* Vaccine Tab */}
-        <TabsContent value="vaccine" className="space-y-4">
-          <SectionConfig
-            config={config}
-            sectionName="vaccine"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-            onUpdateDose={updateDoseConfig}
-            onAddDose={addDose}
-            onRemoveDose={removeDose}
-          />
-          <SectionConfig
-            config={config}
-            sectionName="booster"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-            onUpdateDose={updateDoseConfig}
-            onAddDose={addDose}
-            onRemoveDose={removeDose}
-          />
-        </TabsContent>
-
-        {/* Titer Tab */}
-        <TabsContent value="titer" className="space-y-4">
-          <SectionConfig
-            config={config}
-            sectionName="titer"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-          />
-          <SectionConfig
-            config={config}
-            sectionName="repeatTiter"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-          />
-          <SectionConfig
-            config={config}
-            sectionName="otherTiter"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-          />
-        </TabsContent>
-
-        {/* Certification Tab */}
-        <TabsContent value="certification" className="space-y-4">
-          <SectionConfig
-            config={config}
-            sectionName="certification"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-          />
-        </TabsContent>
-
-        {/* Licensure Tab */}
-        <TabsContent value="licensure" className="space-y-4">
-          <SectionConfig
-            config={config}
-            sectionName="licensure"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-          />
-        </TabsContent>
-
-        {/* Screening Tab */}
-        <TabsContent value="screening" className="space-y-4">
-          <SectionConfig
-            config={config}
-            sectionName="bloodTest"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-          />
-          <SectionConfig
-            config={config}
-            sectionName="chestXray"
-            onUpdateEnabled={updateSectionEnabled}
-            onUpdateLabel={updateSectionLabel}
-            onUpdateField={updateFieldConfig}
-          />
+        {config.sections.map((s) => (
+          <TabsContent key={s.id} value={s.id} className="space-y-4">
+            <SectionConfig
+              section={s}
+              onUpdateEnabled={updateSectionEnabled}
+              onUpdateLabel={updateSectionLabel}
+              onUpdateField={updateFieldConfig}
+              onUpdateSection={updateSection}
+              onUpdateRepeatField={updateRepeatField}
+              onAddRepeatField={addRepeatField}
+              onRemoveRepeatField={removeRepeatField}
+            />
+          </TabsContent>
+        ))}
           <SectionConfig
             config={config}
             sectionName="symptomScrn"
@@ -477,28 +401,27 @@ export default function AdminConfigPreview() {
 
 // Section Configuration Component
 interface SectionConfigProps {
-  config: BaseConfig;
-  sectionName: string;
-  onUpdateEnabled: (sectionName: string, enabled: boolean) => void;
-  onUpdateLabel: (sectionName: string, label: string) => void;
-  onUpdateField: (sectionName: string, fieldName: string, updates: Partial<BaseFieldConfig>) => void;
-  onUpdateDose?: (sectionName: string, doseIndex: number, fieldName: string, updates: Partial<BaseFieldConfig>) => void;
-  onAddDose?: (sectionName: string) => void;
-  onRemoveDose?: (sectionName: string, doseIndex: number) => void;
+  section: SectionConfig;
+  onUpdateEnabled: (sectionId: string, enabled: boolean) => void;
+  onUpdateLabel: (sectionId: string, label: string) => void;
+  onUpdateField: (sectionId: string, fieldKey: string, updates: Partial<FieldConfig>) => void;
+  onUpdateSection: (sectionId: string, updates: Partial<SectionConfig>) => void;
+  onUpdateRepeatField?: (sectionId: string, fieldIndex: number, updates: Partial<FieldConfig>) => void;
+  onAddRepeatField?: (sectionId: string, field: FieldConfig) => void;
+  onRemoveRepeatField?: (sectionId: string, fieldIndex: number) => void;
 }
 
 function SectionConfig({
-  config,
-  sectionName,
+  section,
   onUpdateEnabled,
   onUpdateLabel,
   onUpdateField,
-  onUpdateDose,
-  onAddDose,
-  onRemoveDose
+  onUpdateSection,
+  onUpdateRepeatField,
+  onAddRepeatField,
+  onRemoveRepeatField,
 }: SectionConfigProps) {
-  const section = config[sectionName as keyof BaseConfig] as Record<string, unknown>;
-  const IconComponent = SECTION_ICONS[sectionName as keyof typeof SECTION_ICONS] || Settings;
+  const IconComponent = SECTION_ICONS[section.id as keyof typeof SECTION_ICONS] || Settings;
 
   if (!section) return null;
 
@@ -526,7 +449,7 @@ function SectionConfig({
           <Label>Section Label</Label>
           <Input
             value={section.label}
-            onChange={(e) => onUpdateLabel(sectionName, e.target.value)}
+            onChange={(e) => onUpdateLabel(section.id, e.target.value)}
           />
         </div>
 
@@ -535,57 +458,88 @@ function SectionConfig({
             <AccordionTrigger>Field Configuration</AccordionTrigger>
             <AccordionContent>
               <div className="space-y-4">
-                {Object.entries(section).map(([fieldName, fieldConfig]: [string, unknown]) => {
-                  if (typeof fieldConfig !== 'object' || fieldConfig === null || !('controlType' in fieldConfig)) return null;
-
-                  return (
-                    <FieldConfigComponent
-                      key={fieldName}
-                      fieldName={fieldName}
-                      fieldConfig={fieldConfig as BaseFieldConfig}
-                      onUpdate={(updates) => onUpdateField(sectionName, fieldName, updates)}
-                    />
-                  );
-                })}
+                {section.fields.map((field) => (
+                  <FieldConfigComponent
+                    key={field.key}
+                    fieldName={field.key}
+                    fieldConfig={field as BaseFieldConfig}
+                    onUpdate={(updates) => onUpdateField(section.id, field.key, updates)}
+                  />
+                ))}
               </div>
             </AccordionContent>
           </AccordionItem>
 
-          {section.doses && (
-            <AccordionItem value="doses">
-              <AccordionTrigger>Dose Configuration</AccordionTrigger>
+          {section.repeatConfig && (
+            <AccordionItem value="repeat">
+              <AccordionTrigger>Repeatable Group</AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4">
-                  {(section.doses as unknown[]).map((dose: unknown, doseIndex: number) => (
-                    <div key={doseIndex} className="border rounded-lg p-4 space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium">Dose {doseIndex + 1}</h4>
-                        {(section.doses as unknown[]).length > 1 && onRemoveDose && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Min</Label>
+                      <Input
+                        type="number"
+                        value={section.repeatConfig.min}
+                        onChange={(e) =>
+                          onUpdateSection(section.id, {
+                            repeatConfig: { ...section.repeatConfig!, min: parseInt(e.target.value) || 0 }
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Max</Label>
+                      <Input
+                        type="number"
+                        value={section.repeatConfig.max}
+                        onChange={(e) =>
+                          onUpdateSection(section.id, {
+                            repeatConfig: { ...section.repeatConfig!, max: parseInt(e.target.value) || 0 }
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    {section.repeatConfig.fields.map((field, idx) => (
+                      <div key={idx} className="border rounded-lg p-4">
+                        <FieldConfigComponent
+                          fieldName={field.key}
+                          fieldConfig={field as BaseFieldConfig}
+                          onUpdate={(updates) =>
+                            onUpdateRepeatField && onUpdateRepeatField(section.id, idx, updates)
+                          }
+                        />
+                        {section.repeatConfig && section.repeatConfig.fields.length > 1 && onRemoveRepeatField && (
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => onRemoveDose(sectionName, doseIndex)}
+                            onClick={() => onRemoveRepeatField(section.id, idx)}
                           >
                             <Minus className="w-4 h-4" />
                           </Button>
                         )}
                       </div>
-                      {Object.entries(dose as Record<string, unknown>).map(([fieldName, fieldConfig]: [string, unknown]) => (
-                        <FieldConfigComponent
-                          key={fieldName}
-                          fieldName={fieldName}
-                          fieldConfig={fieldConfig as BaseFieldConfig}
-                          onUpdate={(updates) => onUpdateDose && onUpdateDose(sectionName, doseIndex, fieldName, updates)}
-                        />
-                      ))}
-                    </div>
-                  ))}
-                  {onAddDose && (
-                    <Button variant="outline" onClick={() => onAddDose(sectionName)}>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Dose
-                    </Button>
-                  )}
+                    ))}
+                    {onAddRepeatField && (
+                      <Button
+                        variant="outline"
+                        onClick={() =>
+                          onAddRepeatField(section.id, {
+                            key: `field${section.repeatConfig!.fields.length + 1}`,
+                            label: `Field ${section.repeatConfig!.fields.length + 1}`,
+                            type: 'text',
+                            enabled: true,
+                            required: false,
+                          })
+                        }
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Field
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -599,8 +553,8 @@ function SectionConfig({
 // Field Configuration Component
 interface FieldConfigComponentProps {
   fieldName: string;
-  fieldConfig: BaseFieldConfig;
-  onUpdate: (updates: Partial<BaseFieldConfig>) => void;
+  fieldConfig: FieldConfig;
+  onUpdate: (updates: Partial<FieldConfig>) => void;
 }
 
 function FieldConfigComponent({ fieldName, fieldConfig, onUpdate }: FieldConfigComponentProps) {
@@ -628,22 +582,21 @@ function FieldConfigComponent({ fieldName, fieldConfig, onUpdate }: FieldConfigC
           />
         </div>
         <div className="space-y-2">
-          <Label>Control Type</Label>
+          <Label>Field Type</Label>
           <Select
-            value={fieldConfig.controlType}
-            onValueChange={(value: any) => onUpdate({ controlType: value })}
+            value={fieldConfig.type}
+            onValueChange={(value: any) => onUpdate({ type: value })}
           >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="textBox">Text Box</SelectItem>
-              <SelectItem value="textArea">Text Area</SelectItem>
-              <SelectItem value="datePicker">Date Picker</SelectItem>
-              <SelectItem value="dropDown">Dropdown</SelectItem>
+              <SelectItem value="text">Text</SelectItem>
+              <SelectItem value="date">Date</SelectItem>
+              <SelectItem value="dropdown">Dropdown</SelectItem>
               <SelectItem value="radio">Radio</SelectItem>
-              <SelectItem value="checkBox">Checkbox</SelectItem>
-              <SelectItem value="fileUpload">File Upload</SelectItem>
+              <SelectItem value="checkbox">Checkbox</SelectItem>
+              <SelectItem value="file">File</SelectItem>
               <SelectItem value="number">Number</SelectItem>
             </SelectContent>
           </Select>

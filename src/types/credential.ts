@@ -46,6 +46,8 @@ export interface CredentialDocument {
   reviewNotes?: string;
   reviewedAt?: string;
   reviewedBy?: string;
+  studentId?: string;
+  studentName?: string;
 }
 
 // Student profile (Exxat One)

@@ -13,6 +13,67 @@ export interface VisibilityRule {
   showWhen: Record<string, string | number | boolean>;
 }
 
+// Generic models for the refactored configuration engine
+
+// A single field that appears on a form
+export interface FieldConfig {
+  key: string;                        // unique identifier within the section
+  label: string;
+  type: 'text' | 'date' | 'radio' | 'checkbox' | 'dropdown' | 'file' | 'number';
+  enabled: boolean;
+  required: boolean;
+  options?: string[];                 // used for dropdown/radio/checkbox
+  validation?: ValidationRules;
+  visibilityRules?: VisibilityRule[];
+}
+
+// Repeatable group configuration (e.g. vaccine doses)
+export interface RepeatConfig {
+  repeatable: true;
+  min: number;
+  max: number;
+  labelPattern?: string;              // e.g. "Dose {index}"
+  fields: FieldConfig[];
+}
+
+// Generic expiry rule description
+export interface ExpiryRule {
+  type: 'fixedDate' | 'period' | 'basedOnField';
+  baseField?: string;                 // required for basedOnField
+  period?: {
+    years?: number;
+    months?: number;
+    days?: number;
+  };
+  fixedDate?: string;                 // ISO string for fixedDate
+}
+
+// Validation rules for fields
+export interface ValidationRules {
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  customErrorMessage?: string;
+}
+
+// Section configuration used by the new dynamic engine
+export interface SectionConfig {
+  id: string;
+  label: string;
+  enabled: boolean;
+  required: boolean;
+  fields: FieldConfig[];
+  expiryRule?: ExpiryRule;
+  repeatConfig?: RepeatConfig;
+  contextOverrides?: ContextOverride[];
+}
+
+// Context override structure (e.g. clinical vs academic)
+export interface ContextOverride {
+  context: 'clinical' | 'academic' | string;
+  overrides: Partial<SectionConfig>;
+}
+
 // Expiry date configuration
 export interface ExpiryDateConfig {
   'fixed-date'?: {
@@ -254,21 +315,9 @@ export interface BaseConfig {
   };
   reportingContext: ReportingContext;
   guidelines: GuidelinesConfig;
-
-  // Sections
-  vaccine: VaccineSection;
-  booster: BoosterSection;
-  titer: TiterSection;
-  repeatTiter: TiterSection;
-  bloodTest: BloodTestSection;
-  chestXray: ChestXraySection;
-  symptomScrn: SymptomScreeningSection;
-  certification: CertificationSection;
-  licensure: LicensureSection;
-  hisummary: HISummarySection;
-  decline: DeclineSection;
-  historyOfDisease: HistoryOfDiseaseSection;
-  otherTiter: OtherTiterSection;
+  // Sections replaced by generic array for dynamic engine
+  sections: SectionConfig[];
 }
 
+// legacy alias (may be removed after migration)
 export type BaseConfigType = BaseConfig;

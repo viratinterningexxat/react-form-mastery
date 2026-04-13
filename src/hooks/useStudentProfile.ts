@@ -1,5 +1,6 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useLocalStorage } from './useLocalStorage';
+import { useAuth } from '@/contexts/AuthContext';
 import { StudentProfile, WorkHistoryEntry } from '@/types/credential';
 
 const STORAGE_KEY = 'student_profile';
@@ -28,6 +29,45 @@ export function useStudentProfile() {
     STORAGE_KEY,
     DEFAULT_PROFILE
   );
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user || user.role !== 'student') return;
+
+    const shouldSeedProfile =
+      profile.firstName.trim() === '' &&
+      profile.lastName.trim() === '' &&
+      profile.email.trim() === '';
+
+    if (!shouldSeedProfile) return;
+
+    setProfile((prev) => ({
+      ...prev,
+      firstName: 'John',
+      lastName: 'Student',
+      legalName: 'John Student',
+      email: user.email,
+      phone: '555-010-1234',
+      program: 'Nursing',
+      expectedGraduation: '2025-06-15',
+      bio: 'Aspiring pediatric nurse with a passion for patient care.',
+      workHistory: [
+        {
+          id: `work_${Date.now()}`,
+          title: 'Student Nurse Intern',
+          organization: 'University Hospital',
+          startDate: '2024-01-01',
+          endDate: null,
+          isCurrent: true,
+          description: 'Rotations in pediatric and critical care units.',
+        },
+      ],
+      interests: ['Community Health', 'Patient Advocacy'],
+      languages: ['English', 'Spanish'],
+      certifications: ['BLS/CPR Certification'],
+      updatedAt: new Date().toISOString(),
+    }));
+  }, [user, profile, setProfile]);
 
   const updateProfile = useCallback(
     (updates: Partial<StudentProfile>) => {
